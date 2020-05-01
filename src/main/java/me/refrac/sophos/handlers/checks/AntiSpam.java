@@ -43,6 +43,9 @@ public class AntiSpam extends Check
       }
       final Player eventUser = chatEvent.getPlayer();
       if (!chatEvent.getPlayer().hasPermission("sophos.chat.donor")) {
+        if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+          return;
+        }
       if (this.chatCooldown.containsKey(eventUser)) {
         chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".cooldownMessage").replace("{time}", String.valueOf(this.chatCooldown.get(eventUser)))));
         chatEvent.setCancelled(true);
@@ -50,11 +53,17 @@ public class AntiSpam extends Check
       }
       }
       if (chatEvent.getPlayer().hasPermission("sophos.chat.donor")) {
+        if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+          return;
+        }
       if (this.chatCooldown1.containsKey(eventUser)) {
           chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".donorCooldownMessage").replace("{time}", String.valueOf(this.chatCooldown1.get(eventUser)))));
           chatEvent.setCancelled(true);
           return;
       }
+        if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+          return;
+        }
       this.chatCooldown1.put(eventUser, Integer.valueOf(this.plugin.getConfig().getInt("Checks." + this.getIdentifier() + ".donorDuration")));
       this.cooldownTask1.put(eventUser, new BukkitRunnable() {
             public void run() {
@@ -68,6 +77,9 @@ public class AntiSpam extends Check
           });
       ((BukkitRunnable)this.cooldownTask1.get(eventUser)).runTaskTimer(this.plugin, 20L, 20L);
       } else if (!chatEvent.getPlayer().hasPermission("sophos.chat.donor")) {
+        if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+          return;
+        }
       this.chatCooldown.put(eventUser, Integer.valueOf(this.plugin.getConfig().getInt("Checks." + this.getIdentifier() + ".cooldownDuration")));
       this.cooldownTask.put(eventUser, new BukkitRunnable()
           {

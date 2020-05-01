@@ -31,7 +31,6 @@ public class CMDStaffChat implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
-		if (plugin.getConfig().getBoolean("Messages.enabled") == true) {
 		if (!(sender instanceof Player)) return false;
 		boolean isUsingPlaceholder = false;
 	    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
@@ -42,7 +41,11 @@ public class CMDStaffChat implements CommandExecutor {
 	    	p.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
 	    	return false;
 	    }
-	    if (args.length >= 0) {
+		if (args.length == 0) {
+			p.sendMessage(chat("&cInvalid arguments! /staffchat <message> or /sc <message>"));
+			return false;
+		}
+	    if (args.length > 0) {
 	    String finalString, str = Joiner.on(" ").join(args);
 	    String format = chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, Core.plugin.getConfig().getString("Messages.format").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName()).replace("{message}", str).replace("{arrowright}", "\u00BB")) : Core.plugin.getConfig().getString("Messages.format").replace("{player}", p.getName()).replace("{message}", str).replace("{arrowright}", "\u00BB"));
 	    
@@ -53,13 +56,8 @@ public class CMDStaffChat implements CommandExecutor {
               staff.sendMessage(finalString);
             }
           }
-	    } else {
-	    	p.sendMessage(chat("&cInvalid arguments! /staffchat <message> or /sc <message>"));
-	    	return false;
 	    }
 	    
 	    return true;
-	  }
-		return false;
 	}
 }

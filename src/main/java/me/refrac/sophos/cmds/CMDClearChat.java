@@ -34,7 +34,7 @@ public class CMDClearChat implements CommandExecutor {
 		 if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
 			 isUsingPlaceholder = true;
 		 }
-	     if (!sender.hasPermission("sophos.staff") && !sender.hasPermission("sophos.admin")) {
+	     if (!sender.hasPermission("sophos.staff")) {
 		     sender.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
 		     return false;
 		 }

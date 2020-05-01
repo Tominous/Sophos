@@ -38,11 +38,10 @@ public class CMDSCToggle implements CommandExecutor, Listener {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
-		if (this.plugin.getConfig().getBoolean("Messages.enabled") == true) {
 		if (!(sender instanceof Player)) return false;
 	    Player p = (Player)sender;
 	    if (args.length == 0) {
-	    if (!p.hasPermission("sophos.staffchat.use") && !p.hasPermission("sophos.staff") && !sender.hasPermission("sophos.admin")) {
+	    if (!p.hasPermission("sophos.staffchat.use") && !p.hasPermission("sophos.staff")) {
 	    	p.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
 	    	return false;
 	    } 
@@ -57,32 +56,28 @@ public class CMDSCToggle implements CommandExecutor, Listener {
 	    }    
 	    }
 		return false;
-		}
-		return false;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent chatEvent) {
-		if (this.plugin.getConfig().getBoolean("Messages.enabled") == true) {
-		Player p = chatEvent.getPlayer();
-		
+		Player p = chatEvent.getPlayer ();
+
 		boolean isUsingPlaceholder = false;
-	    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-	      isUsingPlaceholder = true;
-	    }
-		
-		String format = chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, Core.plugin.getConfig().getString("Messages.format").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName()).replace("{message}", chatEvent.getMessage()).replace("{arrowright}", "\u00BB")) : Core.plugin.getConfig().getString("Messages.format").replace("{player}", p.getName()).replace("{message}", chatEvent.getMessage()).replace("{arrowright}", "\u00BB"));
-	    
-	    if(this.toggle.contains(p)) {
-	    
-	    chatEvent.setCancelled(true);
-	    
-	    for(Player staff : Bukkit.getServer().getOnlinePlayers()) {
-			if(staff.hasPermission("sophos.staffchat.use") && staff.hasPermission("sophos.staff")) {
-				staff.sendMessage(format);
+		if (Bukkit.getPluginManager ().isPluginEnabled ( "PlaceholderAPI" )) {
+			isUsingPlaceholder = true;
+		}
+
+		String format = chat ( isUsingPlaceholder ? PlaceholderAPI.setPlaceholders ( p , Core.plugin.getConfig ().getString ( "Messages.format" ).replace ( "{player}" , p.getName () ).replace ( "{displayname}" , p.getDisplayName () ).replace ( "{message}" , chatEvent.getMessage () ).replace ( "{arrowright}" , "\u00BB" ) ) : Core.plugin.getConfig ().getString ( "Messages.format" ).replace ( "{player}" , p.getName () ).replace ( "{message}" , chatEvent.getMessage () ).replace ( "{arrowright}" , "\u00BB" ) );
+
+		if (this.toggle.contains ( p )) {
+
+			chatEvent.setCancelled ( true );
+
+			for (Player staff : Bukkit.getServer ().getOnlinePlayers ()) {
+				if (staff.hasPermission ( "sophos.staffchat.use" ) && staff.hasPermission ( "sophos.staff" )) {
+					staff.sendMessage ( format );
+				}
 			}
-	    }
-	 	}
-	}
+		}
 	}
 }

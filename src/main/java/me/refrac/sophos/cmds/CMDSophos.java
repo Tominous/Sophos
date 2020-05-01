@@ -54,9 +54,9 @@ public class CMDSophos
               TextComponent mainComponent1 = new TextComponent("\u00A7c\u00A7l/sophos help \u00A77- \u00A7f\u00A7lView this help page.");
               mainComponent1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click me!").create()));
               mainComponent1.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sophos help"));
-              TextComponent mainComponent2 = new TextComponent("\u00A7c\u00A7l/sophosreload \u00A77- \u00A7f\u00A7lReloads the config file.");
+              TextComponent mainComponent2 = new TextComponent("\u00A7c\u00A7l/sophos reload \u00A77- \u00A7f\u00A7lReloads the config file.");
               mainComponent2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click me!").create()));
-              mainComponent2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sophosreload"));
+              mainComponent2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sophos reload"));
               TextComponent mainComponent3 = new TextComponent("\u00A7c\u00A7l/sc <message> \u00A77- \u00A7f\u00A7lStaffChat command.");
               mainComponent3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click me!").create()));
               mainComponent3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sc"));
@@ -104,9 +104,9 @@ public class CMDSophos
             TextComponent mainComponent1 = new TextComponent("\u00A7c\u00A7l/sophos help \u00A77- \u00A7f\u00A7lView this help page.");
             mainComponent1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT , new ComponentBuilder("Click me!").create()));
             mainComponent1.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sophos help"));
-            TextComponent mainComponent2 = new TextComponent("\u00A7c\u00A7l/sophosreload \u00A77- \u00A7f\u00A7lReloads the config file.");
+            TextComponent mainComponent2 = new TextComponent("\u00A7c\u00A7l/sophos reload \u00A77- \u00A7f\u00A7lReloads the config file.");
             mainComponent2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click me!").create()));
-            mainComponent2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sophosreload"));
+            mainComponent2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sophos reload"));
             TextComponent mainComponent3 = new TextComponent("\u00A7c\u00A7l/sc <message> \u00A77- \u00A7f\u00A7lStaffChat command.");
             mainComponent3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click me!").create()));
             mainComponent3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sc"));

@@ -33,7 +33,7 @@ public class CMDMutechat implements CommandExecutor, Listener {
 	  
 	  @Override
 	  public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
-	     if (!sender.hasPermission("sophos.staff") && !sender.hasPermission("sophos.admin")) {
+	     if (!sender.hasPermission("sophos.staff")) {
 		     sender.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
 		     return false;
 		 }

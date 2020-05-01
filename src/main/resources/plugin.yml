@@ -3,6 +3,8 @@ version: ${project.version}
 authors: [Refrac, AnnaDev]
 main: me.refrac.sophos.Core
 description: ${project.description}
+depend: [Vault]
+softdepend: [PlaceholderAPI]
 commands:
   sophos:
     description: Sophos command
@@ -41,4 +43,4 @@ permissions:
     default: false
   sophos.bypass.*:
     description: Allows the user to bypass all checks
-    default: false
+    default: op

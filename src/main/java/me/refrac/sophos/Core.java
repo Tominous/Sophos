@@ -15,7 +15,6 @@ import me.refrac.sophos.cmds.CMDClearChat;
 import me.refrac.sophos.cmds.CMDMutechat;
 import me.refrac.sophos.cmds.CMDSCToggle;
 import me.refrac.sophos.cmds.CMDSophos;
-import me.refrac.sophos.cmds.CMDSophosreload;
 import me.refrac.sophos.cmds.CMDStaffChat;
 import me.refrac.sophos.gui.GUI;
 import me.refrac.sophos.handlers.ChatHandler;
@@ -58,7 +57,6 @@ implements Listener {
     getHandlers();
     
     getCommand("sophos").setExecutor(new CMDSophos(this));
-    getCommand("sophosreload").setExecutor(new CMDSophosreload(this));
     getCommand("staffchat").setExecutor(new CMDStaffChat(this));
     getCommand("sctoggle").setExecutor(new CMDSCToggle(this));
     if (this.plugin.getConfig().getBoolean("MuteChat.enabled") == true) {
