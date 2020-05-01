@@ -1,0 +1,282 @@
+#========================================#
+#    _____             __                #
+#   / ___/____  ____  / /_  ____  _____  #
+#   \__ \/ __ \/ __ \/ __ \/ __ \/ ___/  #
+#  ___/ / /_/ / /_/ / / / / /_/ (__  )   #
+# /____/\____/ .___/_/ /_/\____/____/    #
+#           /_/                          #
+#========================================#
+# Authors: Refrac & AnnaDev
+# Plugin Version: 2.2.5
+# Plugin Page: https://www.spigotmc.org/resources/55372/
+# PlaceholderAPI is supported
+# Checks for an update on-join
+Update:
+  # Do you want it enabled or not?
+  enabled: true
+Chat:
+  # Do you want it enabled or not?
+  enabled: false
+  # What should the chat format be?
+  format: "&f{player} &8&l{arrowright}&f {message}"
+GUI:
+  # Do you want it enabled or not?
+  enabled: true
+MuteChat:
+  # Do you want it enabled or not?
+  enabled: false
+  # Do you want it enabled or not?
+  broadcast: true
+  # What should the messages be? {player} also works for console
+  broadcastMutedSent: "&fServer chat has been muted by &e{player}&f."
+  broadcastUnMutedSent: "&fServer chat has been unmuted by &e{player}&f."
+  chatMutedSent: "&fServer chat has been muted by &e{player}&f."
+  chatUnMutedSent: "&fServer chat has been unmuted by &e{player}&f."
+  # This message is sent to the player if you don't have the bypass permission
+  messageSent: "&cChat is currently disabled."
+  # What should the bypass permission be?
+  bypassPermission: "sophos.bypass.mutechat"
+ClearChat:
+  # Do you want it enabled or not?
+  enabled: false
+  # Do you want it enabled or not?
+  broadcast: true
+  # What should the messages be? {player} also works for console
+  broadcastClearedSent: "&fServer chat has been cleared by &e{player}&f."
+  # This message is only sent to the player who executed /clearchat
+  chatClearedSent: "&fServer chat has been cleared."
+  # The amount of lines to be sent before the chat cleared messages
+  lines: 100
+Join-Quit:
+  # Do you want it enabled or not?
+  enabled: false
+  # What should the messages be?
+  firstjoin_message: "&fWelcome &e{player} &fto &c&lSERVER!"
+  join_message: "&e{player} &fhas joined."
+  silent_join_message: "&fWelcome back, &e{player}&f."
+  quit_message: "&e{player} &fhas left."
+  silent_quit_message: "&fGoodbye, &e{player}."
+Messages:
+  # Do you want it enabled or not?
+  enabled: false
+  # What should the messages be?
+  toggleOn: "&7StaffChat has been toggled &aON."
+  toggleOff: "&7StaffChat has been toggled &cOFF."
+  # What should the chat format be?
+  format: "&8(&4&lSC&8) &6&l{player} &8&l{arrowright} &f&l{message}"
+  # This will be used for other no permission messages so don't make it specific to staffchat
+  no-permission: "&cSorry you don't have permission."
+Alerts:
+  AntiSwear:
+     # Do you want it enabled or not?
+     enabled: false
+     # What should the message be?
+     messageSent: "&cSophos &7{arrowright} &c{player} &7is attempting to &6swear&7."
+  AntiAdvertisement:
+     # Do you want it enabled or not?
+     enabled: false
+     # What should the message be?
+     messageSent: "&cSophos &7{arrowright} &c{player} &7is attempting to &6advertise&7."
+Checks:
+  # Anti-Swear allows you to prevent users to
+  # send an Message to the Chat that is in the
+  # blockedWords list you can configure it
+  # this is pretty Strict so be careful you can
+  # also Whitelist certain words for example the
+  # word "ass" can be confused with "bass" because
+  # "bass" contains "ass" so you can whitelist If you
+  # encounter such problems.
+  AntiSwear:
+     # Do you want it enabled or not?
+     enabled: true
+     # Do you want it enabled or not?
+     kick: false
+     # command without /
+     kickCommand: "kick {player} &cSophos &7{arrowright} &fPlease do not swear!"
+     # Do you want it enabled or not?
+     # This will change the lists to be case-sensitive
+     caseSensitive: true
+     # What words should get blocked?
+     # Example:
+     # - scumbag
+     # - ass
+     blockedWords:
+     - ass
+     - bitch
+     - dick
+     - shit
+     - stupid
+     - whore
+     - cunt
+     - nig
+     # What words should be whitelisted?
+     # Example:
+     # - bass
+     whitelistedWords: 
+     - bass
+     # What should the message be?
+     messageSent: "&c&lSERVER >> &fSwearing is forbidden please do not use bad words."
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.antiswear"
+  # Anti-Advertisements prevents people from
+  # sending URL/IPs this by default has an protection
+  # even If you don't specify anything in the BlockedExtensions
+  # so If something gets bypassed add it there.
+  # You can also whitelist some Sites that won't get blocked
+  # by the System for example your own server IP etc...
+  AntiAdvertisement:
+     # Do you want it enabled or not?
+     enabled: true
+     # Do you want it enabled or not?
+     kick: false
+     # command without /
+     kickCommand: "kick {player} &cSophos &7{arrowright} &fPlease do not advertise!"
+     # What extensions should get blocked?
+     # Unnecessary, covered by patterns.
+     blockedExtensions: []
+     # Whitelist sites?
+     # Example:
+     # - "https://www.google.com"
+     whitelistSites:
+     - https://yoursite.com
+     - https://yoursite.net
+     # What should the message be?
+     messageSent: "&c&lSERVER >> &fAdvertising is forbidden please do not advertise."
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.antiad"
+  # Anti-Capslock prevents people from using
+  # too much Capslock or in another word too much
+  # uppercase characters, this detects the specified
+  # percent used If more than the Specified then
+  # the message will get blocked, you can also specify
+  # the minimumLength required to check for.
+  AntiCapslock:
+     # Do you want it enabled or not?
+     enabled: true
+     # Do you want it enabled or not?
+     kick: false
+     # command without /
+     kickCommand: "kick {player} &cSophos &7{arrowright} &fPlease do not use excessive caps!"
+     # What should the Minimum Length be?
+     minimumLength: 6
+     # Percent required to get blocked.
+     percentRequired: 75
+     # What should the message be?
+     messageSent: "&c&lSERVER >> &fUsage of too much uppercase characters is forbidden."
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.anticapslock"
+  # Chat-Cooldown prevents people from sending
+  # too much messages in certain time you can
+  # specify how much the Cooldown Duration is
+  # and you can use {time} in the message as a
+  # placeholder to tell the Cooldown's remaining time.
+  ChatCooldown:
+     # Do you want it enabled or not?
+     enabled: true
+     # What should the message be?
+     cooldownMessage: "&c&lSERVER >> &fPlease wait {time}s before sending another message."
+     # What should the message be?
+     donorCooldownMessage: "&c&lSERVER >> &fPlease wait {time}s before sending another message."
+     # What should the Duration for the Cooldown be?
+     cooldownDuration: 3
+     # What should the duration for the Cooldown be? permission is sophos.chat.donor
+     donorDuration: 1
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.chatcooldown"
+  # Command-Cooldown prevents people from executing
+  # too much commands in certain time you can
+  # specify how much the Cooldown Duration is
+  # and you can use {time} in the message as a
+  # placeholder to tell the Cooldown's remaining time.
+  CommandCooldown:
+     # Do you want it enabled or not?
+     enabled: true
+     # What should the message be?
+     cooldownMessage: "&c&lSERVER >> &fPlease wait {time}s before executing an command."
+     # What should the Duration for the Cooldown be?
+     cooldownDuration: 3
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.commandcooldown"
+  # CommandBlocker prevents people from executing
+  # commands that you specify below.
+  CommandBlocker:
+     # Do you want it enabled or not?
+     enabled: true
+     # What commands should be blocked?
+     # Example:
+     # - plugins
+     disabledCommands:
+     - 'plugins'
+     - 'pl'
+     - 'version'
+     - 'ver'
+     - 'about'
+     - 'help'
+     - 'ehelp'
+     - '?'
+     - 'icanhasbukkit'
+     - 'timings'
+     - 'bukkit:plugins'
+     - 'bukkit:pl'
+     - 'bukkit:version'
+     - 'bukkit:ver'
+     - 'bukkit:about'
+     - 'bukkit:help'
+     - 'bukkit:?'
+     - 'bukkit:timings'
+     - 'minecraft:plugins'
+     - 'minecraft:pl'
+     - 'minecraft:version'
+     - 'minecraft:ver'
+     - 'minecraft:about'
+     - 'minecraft:help'
+     - 'minecraft:?'
+     # What should the message be?
+     disabledCommand: "&c&lSERVER >> &fYou cannot execute that command."
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.commandblocker"
+  # AntiJoinSpam prevents people from sending messages
+  # once they Join the server basically they have to move
+  # a block before they can send any commands.
+  AntiJoinSpam:
+     # Do you want it enabled or not?
+     enabled: true
+     # What should the message be?
+     sentMessage: "&c&lSERVER >> &fYou have to move a block before you can send messages."
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.antijoinspam"
+  # AutoCorrect attempts to fix some known
+  # typos that people tend to make so for example
+  # if someone enters "cant" it will be "can't" etc.
+  AutoCorrect:
+     # Do you want it enabled or not?
+     enabled: true
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.autocorrect"
+  # AutoDot adds an dot to the end
+  # of what you are writing.
+  AutoDot:
+     # Do you want this enabled or not?
+     enabled: true
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.autodot"
+  # AntiUnicode prevents people from using
+  # any Unicode Character that is not whitelisted
+  # this exludes A-Z and 0-9 you can add your own
+  # characters to the Whitelist below....
+  # This is used to prevent bypasses for the
+  # anti-advertisement and anti-swear.
+  AntiUnicode:
+     # Do you want it enabled or not?
+     enabled: true
+     # Do you want it enabled or not?
+     kick: false
+     # command without /
+     kickCommand: "kick {player} &cSophos &7{arrowright} &fPlease do not use Unicode chars!"
+     # What characters should be whitelisted?
+     # You can use {empty} if you don't want any.
+     whitelistChars: "~!@#$%^&*()_+=-{}\\[\\]|';:.,/?><"
+     # What should the message be?
+     messageSent: "&c&lSERVER >> &fYou can't use Unicode Characters, we are sorry about that."
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.antiunicode"
