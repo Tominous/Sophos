@@ -38,9 +38,7 @@ public class Core extends JavaPlugin
 implements Listener {
 	
   public static Core plugin;
-  
-  public String PLUGIN_URL = "https://www.spigotmc.org/resources/55372";
-  
+    
   public List<Check> Checks;
     
   public Core() {
