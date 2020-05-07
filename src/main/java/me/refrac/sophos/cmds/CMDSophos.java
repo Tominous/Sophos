@@ -138,39 +138,17 @@ public class CMDSophos
                 ((Player)sender).spigot().sendMessage(mainComponent4);
             }
             sender.sendMessage("");
-            sender.sendMessage(chat("&7&l&m-------------------------------------------" ));
+            sender.sendMessage(chat("&7&l&m-------------------------------------------"));
             return true;
-        }
-        if (args[0].equalsIgnoreCase("reload")) {
+        } else if (args[0].equalsIgnoreCase("reload")) {
         if (!sender.hasPermission("sophos.admin")) {
             sender.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
             return false;
         }
-        Core.plugin.reloadConfig ();
+        Core.plugin.reloadConfig();
         sender.sendMessage(chat("&7Config reloaded."));
         return true;
     }
-      if (args[0].equalsIgnoreCase("update")) {
-    	  if (!sender.hasPermission("sophos.update")) {
-    		  sender.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
-    		  return false;
-    	  }
-    	  // This update checker is provided by BGHDDevelopment.
-    	  new UpdateChecker(plugin, 55372).getLatestVersion(version -> {
-    	        if (plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
-    	            sender.sendMessage(ChatColor.GREEN + "Sophos is up to date!");
-    	        } else {
-    	        	sender.sendMessage(chat("&7&l&m-------------------------------------------"));
-                    sender.sendMessage(ChatColor.RED + "Sophos is outdated!");
-                    sender.sendMessage(ChatColor.RED + "Newest version: " + version);
-                    sender.sendMessage(ChatColor.RED + "Your version: " + ChatColor.BOLD + plugin.getDescription().getVersion());
-                    sender.sendMessage(ChatColor.GOLD + "Please Update Here: " + ChatColor.ITALIC + plugin.PLUGIN_URL);
-                    sender.sendMessage(chat("&7&l&m-------------------------------------------"));
-    	        }
-    	    });
-    	  return true;
-      }
-      }
 	return false;
 }
 }
