@@ -32,9 +32,6 @@ permissions:
   sophos.staffchat.use:
     description: Permission to use/see Staffchat
     default: op
-  sophos.update:
-    description: Permission to check for an update
-    default: op
   sophos.silent.join:
     description: Allows the user to join silently
     default: false
