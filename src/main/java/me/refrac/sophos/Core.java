@@ -68,19 +68,6 @@ implements Listener {
     
     getConfig().options().copyDefaults(true);
     saveDefaultConfig();
-    // This update checker is provided by BGHDDevelopment.
-    new UpdateChecker(this, 55372).getLatestVersion(version -> {
-        if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-            Logger.log(Logger.LogLevel.SUCCESS, "Sophos is up to date!");
-        } else {
-            Logger.log(Logger.LogLevel.OUTLINE, "-------------------------------------------");
-            Logger.log(Logger.LogLevel.WARNING, "Sophos is outdated!");
-            Logger.log(Logger.LogLevel.WARNING, "Newest version: " + version);
-            Logger.log(Logger.LogLevel.WARNING, "Your version: " + plugin.getDescription().getVersion());
-            Logger.log(Logger.LogLevel.WARNING, "Please Update Here: " + PLUGIN_URL);
-            Logger.log(Logger.LogLevel.OUTLINE, "-------------------------------------------");
-        }
-    });
   }
  
   @Override
