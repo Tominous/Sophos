@@ -8,6 +8,7 @@ package me.refrac.sophos;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,8 +22,6 @@ import me.refrac.sophos.handlers.ChatHandler;
 import me.refrac.sophos.handlers.Check;
 import me.refrac.sophos.handlers.DevJoinHandler;
 import me.refrac.sophos.handlers.JoinQuitHandler;
-import me.refrac.sophos.handlers.Logger;
-import me.refrac.sophos.handlers.UpdateChecker;
 import me.refrac.sophos.handlers.checks.AntiAdvertisement;
 import me.refrac.sophos.handlers.checks.AntiCapslock;
 import me.refrac.sophos.handlers.checks.AntiCommandSpam;
@@ -34,13 +33,10 @@ import me.refrac.sophos.handlers.checks.AutoCorrect;
 import me.refrac.sophos.handlers.checks.BlockedCommands;
 import me.refrac.sophos.handlers.checks.DotEvent;
 
-public class Core extends JavaPlugin
-implements Listener {
+public class Core extends JavaPlugin implements Listener {
 	
   public static Core plugin;
-  
-  public String PLUGIN_URL = "https://www.spigotmc.org/resources/55372";
-  
+
   public List<Check> Checks;
     
   public Core() {
@@ -68,19 +64,6 @@ implements Listener {
     
     getConfig().options().copyDefaults(true);
     saveDefaultConfig();
-    // This update checker is provided by BGHDDevelopment.
-    new UpdateChecker(this, 55372).getLatestVersion(version -> {
-        if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-            Logger.log(Logger.LogLevel.SUCCESS, "Sophos is up to date!");
-        } else {
-            Logger.log(Logger.LogLevel.OUTLINE, "-------------------------------------------");
-            Logger.log(Logger.LogLevel.WARNING, "Sophos is outdated!");
-            Logger.log(Logger.LogLevel.WARNING, "Newest version: " + version);
-            Logger.log(Logger.LogLevel.WARNING, "Your version: " + plugin.getDescription().getVersion());
-            Logger.log(Logger.LogLevel.WARNING, "Please Update Here: " + PLUGIN_URL);
-            Logger.log(Logger.LogLevel.OUTLINE, "-------------------------------------------");
-        }
-    });
   }
  
   @Override

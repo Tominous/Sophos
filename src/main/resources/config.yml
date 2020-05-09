@@ -8,10 +8,9 @@
 #========================================#
 # Authors: Refrac & AnnaDev
 # Plugin Version: 2.2.5
-# Plugin Page: https://www.spigotmc.org/resources/55372/
 # PlaceholderAPI is supported
-# Checks for an update on-join
-Update:
+# This is a debug option for the developers to use to help fix an issue easier
+Debug:
   # Do you want it enabled or not?
   enabled: true
 Chat:
