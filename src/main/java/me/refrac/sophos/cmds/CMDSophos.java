@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import me.refrac.sophos.Core;
 import me.refrac.sophos.gui.GUI;
+import me.refrac.sophos.handlers.UpdateChecker;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -137,18 +138,17 @@ public class CMDSophos
                 ((Player)sender).spigot().sendMessage(mainComponent4);
             }
             sender.sendMessage("");
-            sender.sendMessage(chat("&7&l&m-------------------------------------------" ));
+            sender.sendMessage(chat("&7&l&m-------------------------------------------"));
             return true;
         } else if (args[0].equalsIgnoreCase("reload")) {
         if (!sender.hasPermission("sophos.admin")) {
             sender.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
             return false;
         }
-        Core.plugin.reloadConfig ();
+        Core.plugin.reloadConfig();
         sender.sendMessage(chat("&7Config reloaded."));
         return true;
-      }
-      }
+    }
 	return false;
 }
 }

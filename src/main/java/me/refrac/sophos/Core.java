@@ -8,7 +8,6 @@ package me.refrac.sophos;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +21,8 @@ import me.refrac.sophos.handlers.ChatHandler;
 import me.refrac.sophos.handlers.Check;
 import me.refrac.sophos.handlers.DevJoinHandler;
 import me.refrac.sophos.handlers.JoinQuitHandler;
+import me.refrac.sophos.handlers.Logger;
+import me.refrac.sophos.handlers.UpdateChecker;
 import me.refrac.sophos.handlers.checks.AntiAdvertisement;
 import me.refrac.sophos.handlers.checks.AntiCapslock;
 import me.refrac.sophos.handlers.checks.AntiCommandSpam;
@@ -33,10 +34,11 @@ import me.refrac.sophos.handlers.checks.AutoCorrect;
 import me.refrac.sophos.handlers.checks.BlockedCommands;
 import me.refrac.sophos.handlers.checks.DotEvent;
 
-public class Core extends JavaPlugin implements Listener {
+public class Core extends JavaPlugin
+implements Listener {
 	
   public static Core plugin;
-
+    
   public List<Check> Checks;
     
   public Core() {
