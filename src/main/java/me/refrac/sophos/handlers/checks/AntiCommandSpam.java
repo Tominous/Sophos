@@ -10,21 +10,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.refrac.sophos.Core;
+import me.refrac.sophos.Sophos;
 import me.refrac.sophos.handlers.Check;
 
-public class AntiCommandSpam extends Check
-  implements Listener
-{
-  private final Core plugin;
+public class AntiCommandSpam extends Check implements Listener {
+
+  private final Sophos plugin;
   private final HashMap<Player, Integer> commandCooldown;
   private final HashMap<Player, BukkitRunnable> cooldownTask;
   
-  public AntiCommandSpam(Core plugin) {
+  public AntiCommandSpam(Sophos plugin) {
 	super("CommandCooldown", "AntiCommandSpam", plugin);
     this.plugin = plugin;
-    this.commandCooldown = new HashMap<Player, Integer>();
-    this.cooldownTask = new HashMap<Player, BukkitRunnable>();
+    this.commandCooldown = new HashMap<>();
+    this.cooldownTask = new HashMap<>();
   }
   
   public String chat(String s) {
@@ -47,15 +46,15 @@ public class AntiCommandSpam extends Check
       this.cooldownTask.put(eventUser, new BukkitRunnable()
           {
             public void run() {
-              AntiCommandSpam.this.commandCooldown.put(eventUser, Integer.valueOf(((Integer)AntiCommandSpam.this.commandCooldown.get(eventUser)).intValue() - 1));
-              if (((Integer)AntiCommandSpam.this.commandCooldown.get(eventUser)).intValue() == 0) {
+              AntiCommandSpam.this.commandCooldown.put(eventUser, Integer.valueOf((AntiCommandSpam.this.commandCooldown.get(eventUser)).intValue() - 1));
+              if ((AntiCommandSpam.this.commandCooldown.get(eventUser)).intValue() == 0) {
                 AntiCommandSpam.this.commandCooldown.remove(eventUser);
                 AntiCommandSpam.this.cooldownTask.remove(eventUser);
                 cancel();
               } 
             }
           });
-      ((BukkitRunnable)this.cooldownTask.get(eventUser)).runTaskTimer(this.plugin, 20L, 20L);
+      (this.cooldownTask.get(eventUser)).runTaskTimer(this.plugin, 20L, 20L);
     } 
   }
 }

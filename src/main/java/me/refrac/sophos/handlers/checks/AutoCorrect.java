@@ -1,20 +1,18 @@
 package me.refrac.sophos.handlers.checks;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class AutoCorrect extends Check
-implements Listener {
-    private final Core plugin;
+public class AutoCorrect extends Check implements Listener {
 
-    public static AutoCorrect autocorrect;
-    
-    public AutoCorrect(Core plugin) {
+    private final Sophos plugin;
+
+    public AutoCorrect(Sophos plugin) {
 	  	super("AutoCorrect", "AutoCorrect", plugin);
 	    this.plugin = plugin;
     }
@@ -42,7 +40,7 @@ implements Listener {
         }
     }
 
-    public String autoCorrect(String completedWord) {
+    private String autoCorrect(String completedWord) {
         if (completedWord.startsWith("cant")) {
             completedWord = "can't";
         } else if (completedWord.startsWith("wouldnt")) {

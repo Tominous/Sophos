@@ -5,8 +5,9 @@
 
 package me.refrac.sophos.handlers;
 
+import me.refrac.sophos.Sophos;
+import me.refrac.sophos.gui.AntiBotGUI;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,60 +15,47 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-import me.refrac.sophos.Core;
-
 public class JoinQuitHandler implements Listener {
 
-	private final Core plugin;
+	private final Sophos plugin;
 
-    public JoinQuitHandler(Core plugin) {
+    public JoinQuitHandler(Sophos plugin) {
         this.plugin = plugin;
     }
-    
-    public String chat(String s) {
-		return ChatColor.translateAlternateColorCodes('&', s);
-	}
-    
-    @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+
+    @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onJoin(PlayerJoinEvent chatEvent) {
     	if (plugin.getConfig().getBoolean("Join-Quit.enabled") == true) {
-    	Player p = chatEvent.getPlayer();
-    	
-    	boolean isUsingPlaceholder = false;
-	    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-	      isUsingPlaceholder = true;
-	    }
-	    
-    	if (!p.hasPlayedBefore()) {
-    		Bukkit.broadcastMessage(chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, this.plugin.getConfig().getString("Join-Quit.firstjoin_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())) : this.plugin.getConfig().getString("Join-Quit.firstjoin_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())));
-    	} else {
-    		if (p.hasPermission("sophos.silent.join")) {
-    			p.sendMessage(chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, this.plugin.getConfig().getString("Join-Quit.silent_join_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())) : this.plugin.getConfig().getString("Join-Quit.silent_join_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())));
-    			return;
-            } else {
-            	Bukkit.broadcastMessage(chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, this.plugin.getConfig().getString("Join-Quit.join_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())) : this.plugin.getConfig().getString("Join-Quit.join_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())));
-    	}
-	    }
+			Player player = chatEvent.getPlayer();
+
+			chatEvent.setJoinMessage(null);
+
+			if (!player.hasPlayedBefore()) {
+				Bukkit.broadcastMessage(Utils.colorFormat(player, this.plugin.getConfig().getString("Join-Quit.firstjoin_message").replace("{player}", player.getName()).replace("{displayname}", player.getDisplayName())));
+			} else {
+				if (player.hasPermission("sophos.silent.join")) {
+					player.sendMessage(Utils.colorFormat(player, this.plugin.getConfig().getString("Join-Quit.silent_join_message").replace("{player}", player.getName()).replace("{displayname}", player.getDisplayName())));
+					return;
+				} else {
+					Bukkit.broadcastMessage(Utils.colorFormat(player, this.plugin.getConfig().getString("Join-Quit.join_message").replace("{player}", player.getName()).replace("{displayname}", player.getDisplayName())));
+			}
+			}
     }
     }
     
-    @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+    @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onQuit(PlayerQuitEvent chatEvent) {
     	if (plugin.getConfig().getBoolean("Join-Quit.enabled") == true) {
-        Player p = chatEvent.getPlayer();
-        
-        boolean isUsingPlaceholder = false;
-	    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-	      isUsingPlaceholder = true;
-	    }
-	    	    
-        	if (p.hasPermission("sophos.silent.quit")) {
-        		p.sendMessage(chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, this.plugin.getConfig().getString("Join-Quit.silent_quit_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())) : this.plugin.getConfig().getString("Join-Quit.silent_quit_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())));
-        		return;
-        	} else {
-                Bukkit.broadcastMessage(chat(isUsingPlaceholder ? PlaceholderAPI.setPlaceholders(p, this.plugin.getConfig().getString("Join-Quit.quit_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())) : this.plugin.getConfig().getString("Join-Quit.quit_message").replace("{player}", p.getName()).replace("{displayname}", p.getDisplayName())));
-        }
+			Player player = chatEvent.getPlayer();
+
+			chatEvent.setQuitMessage(null);
+
+			if (player.hasPermission("sophos.silent.quit")) {
+				player.sendMessage(Utils.colorFormat(player, this.plugin.getConfig().getString("Join-Quit.silent_quit_message").replace("{player}", player.getName()).replace("{displayname}", player.getDisplayName())));
+				return;
+			} else {
+				Bukkit.broadcastMessage(Utils.colorFormat(player, this.plugin.getConfig().getString("Join-Quit.quit_message").replace("{player}", player.getName()).replace("{displayname}", player.getDisplayName())));
+		    }
         }
     }
 }

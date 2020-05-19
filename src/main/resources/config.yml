@@ -1,14 +1,23 @@
-#========================================#
-#    _____             __                #
-#   / ___/____  ____  / /_  ____  _____  #
-#   \__ \/ __ \/ __ \/ __ \/ __ \/ ___/  #
-#  ___/ / /_/ / /_/ / / / / /_/ (__  )   #
-# /____/\____/ .___/_/ /_/\____/____/    #
-#           /_/                          #
-#========================================#
-# Authors: Refrac & AnnaDev
-# Plugin Version: 2.2.5
+#=================================================#
+#                                                 #
+#   ____    ___    ____    _   _    ___     ____  #
+#  / ___|  / _    |  _    | | | |  / _     / ___| #
+#    ___  | | | | | |_) | | |_| | | | | |    ___  #
+#  ___) | | |_| | |  __/  |  _  | | |_| |  ___) | #
+# |____/    ___/  |_|     |_| |_|   ___/  |____/  #
+# By Refrac & AnnaDev                             #
+#                                                 #
+#=================================================#
+# Support Discord: https://discord.io/RefracDev
+#=================================================#
 # PlaceholderAPI is supported
+# Custom Variables/Placeholders - Not all of these are usable on each message
+# {player} - Get the player's name
+# {displayname} - Get the player's displayname/nickname
+# {arrowright} - Unicode arrow
+# {message} - The player's message
+# {time} - Used to get the remaining time on a chat/command cooldown
+#=================================================#
 # This is a debug option for the developers to use to help fix an issue easier
 Debug:
   # Do you want it enabled or not?
@@ -102,6 +111,7 @@ Checks:
      blockedWords:
      - ass
      - bitch
+     - cock
      - dick
      - shit
      - stupid
@@ -236,12 +246,24 @@ Checks:
      bypassPermission: "sophos.bypass.commandblocker"
   # AntiJoinSpam prevents people from sending messages
   # once they Join the server basically they have to move
-  # a block before they can send any commands.
+  # a block before they can send any commands or messages.
+  # Optionally you can have a GUI pop up instead.
   AntiJoinSpam:
      # Do you want it enabled or not?
      enabled: true
+     # Do you want it enabled or not?
+     # Note: This will be an extra preventive check for Bots.
+     GUI: false
+     # The passed item name
+     GUI_passed_name: "Pass"
+     # The passed item lore
+     GUI_passed_lore: "Click to pass the AntiJoinSpam check."
+     # What should the message be if the player clicks the correct button?
+     passed_message: "&bSophos > &aYou passed the AntiJoinSpam check."
+     # What should the kick message be if the player failed? command without /
+     failed_message: "kick {player} &bSophos > &cYou failed the AntiJoinSpam check."
      # What should the message be?
-     sentMessage: "&c&lSERVER >> &fYou have to move a block before you can send messages."
+     messageSent: "&c&lSERVER >> &fYou have to move a block before you can send messages or commands."
      # What should the bypass permission be?
      bypassPermission: "sophos.bypass.antijoinspam"
   # AutoCorrect attempts to fix some known
@@ -279,3 +301,4 @@ Checks:
      messageSent: "&c&lSERVER >> &fYou can't use Unicode Characters, we are sorry about that."
      # What should the bypass permission be?
      bypassPermission: "sophos.bypass.antiunicode"
+# END OF THE CONFIGURATION FILE

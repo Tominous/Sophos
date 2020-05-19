@@ -3,6 +3,7 @@ package me.refrac.sophos.handlers.checks;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -10,17 +11,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class AntiUnicode extends Check
-  implements Listener
-{
-  private final Core plugin;
-  
-  public AntiUnicode(Core plugin) {
-	  	super("AntiUnicode", "AntiUnicode", plugin);
-	    this.plugin = plugin;
+public class AntiUnicode extends Check implements Listener {
+
+  private final Sophos plugin;
+
+  public AntiUnicode(Sophos plugin) {
+    super("AntiUnicode", "AntiUnicode", plugin);
+    this.plugin = plugin;
   }
 
   public String chat(String s) {
@@ -41,7 +40,7 @@ public class AntiUnicode extends Check
         if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
     		  Bukkit.getScheduler().runTask(plugin, new Runnable() {
     	          public void run() {
-          	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat(Core.plugin.getConfig().getString("Checks.AntiUnicode.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
+          	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat( Sophos.plugin.getConfig().getString("Checks.AntiUnicode.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
     	          }
     		  });
           }

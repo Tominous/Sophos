@@ -5,6 +5,7 @@
 
 package me.refrac.sophos.cmds;
 
+import me.refrac.sophos.Sophos;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -13,14 +14,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.refrac.sophos.Core;
 import net.md_5.bungee.api.ChatColor;
 
 public class CMDClearChat implements CommandExecutor {
 	
-	  private Core plugin;
+	  private Sophos plugin;
 	  
-	  public CMDClearChat(Core plugin) {
+	  public CMDClearChat(Sophos plugin) {
 	     this.plugin = plugin;
 	  }
 	  	  

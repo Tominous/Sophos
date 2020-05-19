@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -11,15 +12,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class AntiAdvertisement extends Check
-implements Listener {
+public class AntiAdvertisement extends Check implements Listener {
 	
-    private final Core plugin;
+    private final Sophos plugin;
 
-    public AntiAdvertisement(Core plugin) {
+    public AntiAdvertisement(Sophos plugin) {
     	super("AntiAdvertisement", "AntiAdvertisement", plugin);
         this.plugin = plugin;
     }
@@ -61,7 +60,7 @@ implements Listener {
                 if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
           		  Bukkit.getScheduler().runTask(plugin, new Runnable() {
           	          public void run() {
-                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat(Core.plugin.getConfig().getString("Checks.AntiAdvertisement.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
+                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat( Sophos.plugin.getConfig().getString("Checks.AntiAdvertisement.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
           	          }
           		  });
                 }
@@ -78,7 +77,7 @@ implements Listener {
                 if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
           		  Bukkit.getScheduler().runTask(plugin, new Runnable() {
           	          public void run() {
-                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat(Core.plugin.getConfig().getString("Checks.AntiAdvertisement.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
+                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat( Sophos.plugin.getConfig().getString("Checks.AntiAdvertisement.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
           	          }
           		  });
                 }
@@ -95,7 +94,7 @@ implements Listener {
                 if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
           		  Bukkit.getScheduler().runTask(plugin, new Runnable() {
           	          public void run() {
-                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat(Core.plugin.getConfig().getString("Checks.AntiAdvertisement.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
+                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat( Sophos.plugin.getConfig().getString("Checks.AntiAdvertisement.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
           	          }
           		  });
                 }

@@ -10,19 +10,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.refrac.sophos.Core;
+import me.refrac.sophos.Sophos;
 import me.refrac.sophos.handlers.Check;
 
-public class AntiSpam extends Check
-  implements Listener
-{
-  private final Core plugin;
+public class AntiSpam extends Check implements Listener {
+
+  private final Sophos plugin;
   private final HashMap<Player, Integer> chatCooldown;
   private final HashMap<Player, Integer> chatCooldown1;
   private final HashMap<Player, BukkitRunnable> cooldownTask;
   private final HashMap<Player, BukkitRunnable> cooldownTask1;
   
-  public AntiSpam(Core plugin) {
+  public AntiSpam(Sophos plugin) {
 	super("ChatCooldown", "AntiSpam", plugin);
     this.plugin = plugin;
     this.chatCooldown = new HashMap<Player, Integer>();
@@ -51,8 +50,7 @@ public class AntiSpam extends Check
         chatEvent.setCancelled(true);
         return;
       }
-      }
-      if (chatEvent.getPlayer().hasPermission("sophos.chat.donor")) {
+      } else if (chatEvent.getPlayer().hasPermission("sophos.chat.donor")) {
         if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
           return;
         }

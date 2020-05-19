@@ -3,32 +3,27 @@ package me.refrac.sophos.handlers.checks;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.refrac.sophos.Sophos;
+import me.refrac.sophos.gui.AntiBotGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class AntiJoinSpam extends Check
-  implements Listener
-{
-  private final Core plugin;
-  Map<Player, Location> storedData;
-  
-  public AntiJoinSpam(Core plugin) {
-	super("AntiJoinSpam", "AntiJoinSpam", plugin);
-    this.storedData = new HashMap<Player, Location>();
+public class AntiJoinSpam extends Check implements Listener {
 
-    
+  private final Sophos plugin;
+  private static Map<Player, Location> storedData;
+
+  public AntiJoinSpam(Sophos plugin) {
+	super("AntiJoinSpam", "AntiJoinSpam", plugin);
     this.plugin = plugin;
+    this.storedData = new HashMap<>();
   }
   
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -43,7 +38,7 @@ public class AntiJoinSpam extends Check
         return;
       }
       this.storedData.put(eventUser, userLocation);
-    } 
+    }
   }
   
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -74,7 +69,24 @@ public class AntiJoinSpam extends Check
       }
     } 
   }
-  
+
+  // AntiBotGUI movement event
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  public void onMovementEvent2(PlayerMoveEvent movementEvent) {
+      if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+        if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".GUI") == true) {
+          if (movementEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") && movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+              return;
+          }
+          Player eventUser = movementEvent.getPlayer();
+          if (this.storedData.containsKey(eventUser) && !AntiBotGUI.getPassedAntiBot().contains(eventUser)) {
+              eventUser.teleport(movementEvent.getFrom());
+              AntiBotGUI.openAntiBotMain(eventUser);
+          }
+      }
+    }
+  }
+
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onChatEvent(AsyncPlayerChatEvent chatEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
@@ -84,10 +96,26 @@ public class AntiJoinSpam extends Check
       Player eventUser = chatEvent.getPlayer();
       if (this.storedData.containsKey(eventUser)) {
         chatEvent.setCancelled(true);
-        chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".sentMessage")));
+        chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
       } else {
         return;
       } 
     } 
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  public void onCommandEvent(PlayerCommandPreprocessEvent commandEvent) {
+    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+      if (commandEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") && commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+        return;
+      }
+      Player eventUser = commandEvent.getPlayer();
+      if (this.storedData.containsKey(eventUser)) {
+        commandEvent.setCancelled(true);
+        commandEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
+      } else {
+        return;
+      }
+    }
   }
 }

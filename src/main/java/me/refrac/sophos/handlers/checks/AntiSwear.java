@@ -2,6 +2,7 @@ package me.refrac.sophos.handlers.checks;
 
 import java.util.List;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -9,17 +10,15 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class AntiSwear extends Check
-  implements Listener
-{
-  private final Core plugin;
+public class AntiSwear extends Check implements Listener {
+
+  private final Sophos plugin;
   
-  public AntiSwear(Core plugin) {
+  public AntiSwear(Sophos plugin) {
   	super("AntiSwear", "AntiSwear", plugin);
-      this.plugin = plugin;
+    this.plugin = plugin;
   }
 
   public String chat(String s) {
@@ -39,13 +38,12 @@ public class AntiSwear extends Check
       if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
-      if (plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".caseSensitive")) {
       for (Object allowedWords : whitelistedWordsList) {
           if (!messageSent.equalsIgnoreCase((String)allowedWords))
             continue;  return;
       } 
       for (Object blockedWords : blockedWordsList) {
-        if (!messageSent.equalsIgnoreCase((String)blockedWords))
+        if (!messageSent.contains((String)blockedWords))
           continue;  chatEvent.setCancelled(true);
           if (this.plugin.getConfig().getBoolean("Alerts." + this.getIdentifier() + ".enabled") == true) {
               if (chatEvent.getPlayer().hasPermission("sophos.alerts")) {
@@ -55,36 +53,12 @@ public class AntiSwear extends Check
           if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
       		  Bukkit.getScheduler().runTask(plugin, new Runnable() {
       	          public void run() {
-            	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat(Core.plugin.getConfig().getString("Checks.AntiSwear.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
+            	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat( Sophos.plugin.getConfig().getString("Checks.AntiSwear.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
       	          }
       		  });
             }
         chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
-      }
     }
-      else {
-          for (Object allowedWords : whitelistedWordsList) {
-              if (!messageSent.contentEquals((CharSequence)allowedWords))
-                continue;  return;
-          } 
-          for (Object blockedWords : blockedWordsList) {
-            if (!messageSent.contentEquals((CharSequence)blockedWords))
-              continue;  chatEvent.setCancelled(true);
-              if (this.plugin.getConfig().getBoolean("Alerts." + this.getIdentifier() + ".enabled") == true) {
-                  if (chatEvent.getPlayer().hasPermission("sophos.alerts")) {
-              	    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Alerts." + this.getIdentifier() + ".messageSent").replace("{player}", chatEvent.getPlayer().getName()).replace("{arrowright}", "\u00BB")));
-                  }
-              }
-              if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
-          		  Bukkit.getScheduler().runTask(plugin, new Runnable() {
-          	          public void run() {
-                	      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), chat(Core.plugin.getConfig().getString("Checks.AntiSwear.kickCommand").replace("{arrowright}", "\u00BB").replace("{player}", chatEvent.getPlayer().getName())));
-          	          }
-          		  });
-                }
-            chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
-          }
-        }
   }
   }
 }

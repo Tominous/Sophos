@@ -1,5 +1,6 @@
 package me.refrac.sophos.handlers.checks;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -7,18 +8,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
 
-public class AntiCapslock extends Check
-  implements Listener
-{
-  private final Core plugin;
-  
-  public AntiCapslock(Core plugin) {
+public class AntiCapslock extends Check implements Listener {
+
+  private final Sophos plugin;
+
+  public AntiCapslock(Sophos plugin) {
   	super("AntiCapslock", "AntiCapslock", plugin);
-      this.plugin = plugin;
+  	this.plugin = plugin;
   }
   
   public String chat(String s) {

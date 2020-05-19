@@ -1,10 +1,11 @@
 name: Sophos
 version: ${project.version}
 authors: [Refrac, AnnaDev]
-main: me.refrac.sophos.Core
+main: me.refrac.sophos.Sophos
 description: ${project.description}
 depend: [Vault]
 softdepend: [PlaceholderAPI]
+
 commands:
   sophos:
     description: Sophos command
@@ -17,25 +18,11 @@ commands:
     description: MuteChat command
   clearchat:
     descripttion: ClearChat command
+
 permissions:
-  sophos.admin:
-    description: Permission to use Sophos Commands & The GUI
-    default: op
-  sophos.staff:
-    description: Permission to use /mutechat & other staff commands
-    default: op
-  sophos.alerts:
-    description: Permission to see alerts
-    default: op
-  sophos.staffchat.use:
-    description: Permission to use/see Staffchat
-    default: op
   sophos.silent.join:
     description: Allows the user to join silently
     default: false
   sophos.silent.quit:
     decription: Allows the user to quit silently
     default: false
-  sophos.bypass.*:
-    description: Allows the user to bypass all checks
-    default: op

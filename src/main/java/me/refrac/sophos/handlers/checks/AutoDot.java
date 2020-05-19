@@ -1,21 +1,20 @@
 package me.refrac.sophos.handlers.checks;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class DotEvent extends Check
-  implements Listener
-{
-  private final Core plugin;
-  
-  public DotEvent(Core plugin) {
-	  super("AutoDot", "DotEvent", plugin);
-	  this.plugin = plugin;
+public class AutoDot extends Check implements Listener {
+
+  private final Sophos plugin;
+
+  public AutoDot(Sophos plugin) {
+    super("AutoDot", "AutoDot", plugin);
+    this.plugin = plugin;
   }
 
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

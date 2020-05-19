@@ -7,6 +7,9 @@ package me.refrac.sophos.cmds;
 
 import java.util.ArrayList;
 
+import me.refrac.sophos.Sophos;
+import me.refrac.sophos.handlers.Placeholders;
+import me.refrac.sophos.handlers.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,13 +22,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.refrac.sophos.Core;
 
 public class CMDSCToggle implements CommandExecutor, Listener {
 	
-	private Core plugin;
+	private Sophos plugin;
 	  
-	public CMDSCToggle(Core plugin) {
+	public CMDSCToggle(Sophos plugin) {
 	    this.plugin = plugin;
 	    this.toggle = new ArrayList<>();
 	}
@@ -39,43 +41,47 @@ public class CMDSCToggle implements CommandExecutor, Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
 		if (!(sender instanceof Player)) return false;
-	    Player p = (Player)sender;
-	    if (args.length == 0) {
-	    if (!p.hasPermission("sophos.staffchat.use") && !p.hasPermission("sophos.staff")) {
-	    	p.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
-	    	return false;
-	    } 
-	    if (this.toggle.contains(p)) {
-	    	this.toggle.remove(p);
-	    	p.sendMessage(chat(Core.plugin.getConfig().getString("Messages.toggleOff")));
-	    	return false;
-	    } else {
-	    	this.toggle.add(p);
-	    	p.sendMessage(chat(Core.plugin.getConfig().getString("Messages.toggleOn")));
-	    	return true;
-	    }    
+			Player player = (Player)sender;
+			if (args.length == 0) {
+			if (!player.hasPermission("sophos.staff")) {
+				player.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
+				return false;
+			}
+			if (this.toggle.contains(player)) {
+				this.toggle.remove(player);
+				player.sendMessage(chat( Sophos.plugin.getConfig().getString("Messages.toggleOff")));
+				return false;
+			}
+			this.toggle.add(player);
+			player.sendMessage(chat( Sophos.plugin.getConfig().getString("Messages.toggleOn")));
+			return true;
 	    }
 		return false;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent chatEvent) {
-		Player p = chatEvent.getPlayer ();
+		if (this.plugin.getConfig().getBoolean("Messages.enabled") == true) {
+			Player player = chatEvent.getPlayer();
 
-		boolean isUsingPlaceholder = false;
-		if (Bukkit.getPluginManager ().isPluginEnabled ( "PlaceholderAPI" )) {
-			isUsingPlaceholder = true;
-		}
+			String finalString = plugin.getConfig().getString("Messages.format");
 
-		String format = chat ( isUsingPlaceholder ? PlaceholderAPI.setPlaceholders ( p , Core.plugin.getConfig ().getString ( "Messages.format" ).replace ( "{player}" , p.getName () ).replace ( "{displayname}" , p.getDisplayName () ).replace ( "{message}" , chatEvent.getMessage () ).replace ( "{arrowright}" , "\u00BB" ) ) : Core.plugin.getConfig ().getString ( "Messages.format" ).replace ( "{player}" , p.getName () ).replace ( "{message}" , chatEvent.getMessage () ).replace ( "{arrowright}" , "\u00BB" ) );
+			finalString = Utils.setupPlaceholderAPI(player, finalString);
+			finalString = Utils.colorFormat(player, finalString);
+			finalString = Placeholders.setPlaceholders(player, finalString);
+			finalString = Utils.chat(finalString);
+			finalString = finalString.replace("{message}", chatEvent.getMessage());
+			finalString = finalString.replaceAll("%", "%%");
+			finalString = Utils.replaceAllVariables(player, finalString);
 
-		if (this.toggle.contains ( p )) {
+			if (this.toggle.contains(player)) {
 
-			chatEvent.setCancelled ( true );
+				chatEvent.setCancelled(true);
 
-			for (Player staff : Bukkit.getServer ().getOnlinePlayers ()) {
-				if (staff.hasPermission ( "sophos.staffchat.use" ) && staff.hasPermission ( "sophos.staff" )) {
-					staff.sendMessage ( format );
+				for (Player staff : Bukkit.getServer().getOnlinePlayers()) {
+					if (staff.hasPermission("sophos.staff")) {
+						staff.sendMessage(finalString);
+					}
 				}
 			}
 		}

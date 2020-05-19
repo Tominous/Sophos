@@ -2,24 +2,23 @@ package me.refrac.sophos.handlers.checks;
 
 import java.util.List;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
-public class BlockedCommands extends Check
-  implements Listener
-{
-  private final Core plugin;
-  
-  public BlockedCommands(Core plugin) {
-	  	super("CommandBlocker", "BlockedCommands", plugin);
-	      this.plugin = plugin;
-}
+public class BlockedCommands extends Check implements Listener {
+
+  private final Sophos plugin;
+
+  public BlockedCommands(Sophos plugin) {
+    super("CommandBlocker", "BlockedCommands", plugin);
+    this.plugin = plugin;
+  }
 
   
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)

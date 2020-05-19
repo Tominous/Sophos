@@ -1,27 +1,20 @@
 package me.refrac.sophos.handlers;
 
+import me.refrac.sophos.Sophos;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-
-import me.refrac.sophos.Core;
 
 public class Check implements Listener {
 	
     private String Identifier;
     private String Name;
-    private Core Core;
+    private Sophos Sophos;
     private boolean Enabled = true;
 
-    public Check(String Identifier, String Name, Core Sophos) {
+    public Check(String Identifier, String Name, Sophos Sophos) {
         this.Name = Name;
-        this.Core = Sophos;
+        this.Sophos = Sophos;
         this.Identifier = Identifier;
-    }
-
-    public void onEnable() {
-    }
-
-    public void onDisable() {
     }
 
     public boolean isEnabled() {
@@ -29,14 +22,14 @@ public class Check implements Listener {
     }
 
     public void setEnabled(boolean Enabled) {
-        if (Core.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled") != Enabled
-                && Core.getConfig().get("Checks." + this.getIdentifier() + ".enabled") != null) {
-            this.Enabled = Core.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled");
+        if (Sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled") != Enabled
+                && Sophos.getConfig().get("Checks." + this.getIdentifier() + ".enabled") != null) {
+            this.Enabled = Sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled");
             return;
         }
         if (Enabled) {
             if (!isEnabled()) {
-                this.Core.registerListener(this);;
+                this.Sophos.registerListener(this);;
             }
         } else if (isEnabled()) {
             HandlerList.unregisterAll(this);
@@ -44,16 +37,8 @@ public class Check implements Listener {
         this.Enabled = Enabled;
     }
 
-    public Core getSophos() {
-        return this.Core;
-    }
-
-    public void checkValues() {
-        if (Core.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-            this.setEnabled(true);
-        } else {
-            this.setEnabled(false);
-        }
+    public Sophos getSophos() {
+        return this.Sophos;
     }
 
     public String getName() {

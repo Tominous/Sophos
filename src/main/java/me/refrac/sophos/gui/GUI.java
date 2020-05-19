@@ -2,6 +2,8 @@ package me.refrac.sophos.gui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import me.refrac.sophos.Sophos;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,25 +18,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.refrac.sophos.Core;
 import me.refrac.sophos.handlers.Check;
 
 public class GUI implements Listener {
-  
-  public static Inventory SophosMain = Bukkit.createInventory(null, 36, ChatColor.RED + "" + ChatColor.BOLD + "Sophos");
-  public static Inventory SophosChecks = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Checks");
+
+  public static Inventory SophosMain = Bukkit.createInventory(null, 36, ChatColor.RED + "Sophos");
+  private static Inventory SophosChecks = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Checks");
   private static ItemStack back = createItem(Material.ARROW, 1, "&6Back");
-  
-  private static Core plugin;
+
+  private static Sophos plugin;
   
   public static String chat(String s) { return ChatColor.translateAlternateColorCodes('&', s); }
   
-  public GUI(Core plugin) {
+  public GUI(Sophos plugin) {
     GUI.plugin = plugin;
     ItemStack checks = createItem(Material.COMPASS, 1, "&cChecks");
     ItemStack info = createItem(Material.BOOK, 1, "&aInfo", new String[0]);
     ItemStack reload = createItem(Material.LAVA_BUCKET, 1, "&cReload", new String[0]);
-    ItemStack quit = createItem(Material.ARROW, 1, "&cQuit");
+    ItemStack close = createItem(Material.ARROW, 1, "&cClose");
     ItemStack support = createItem(Material.BOOK, 1, "&aSupport", new String[0]);
     ItemMeta checksm = checks.getItemMeta();
     ItemMeta infom = info.getItemMeta();
@@ -51,7 +52,7 @@ public class GUI implements Listener {
     SophosMain.setItem(10, checks);
     SophosMain.setItem(13, info);
     SophosMain.setItem(16, reload);
-    SophosMain.setItem(31, quit);
+    SophosMain.setItem(31, close);
     SophosMain.setItem(35, support);
     for (int i = 0; i < 36; i++) {
         if (SophosMain.getItem(i) == null) {
@@ -96,7 +97,7 @@ public class GUI implements Listener {
   private static ArrayList<String> supportLore() {
    ArrayList<String> list = new ArrayList<>();
 	list.add("");
-	list.add(chat("&7If you need support on an issue or suggestion"));
+	list.add(chat("&7If you need support on an issue/error or suggestion"));
 	list.add(chat("&7feel free to join the discord."));
 	list.add("");
 	list.add(chat("&7Left-Click to receive a link."));
@@ -105,7 +106,7 @@ public class GUI implements Listener {
 
   public static void opensophosMain(Player player) { player.openInventory(SophosMain); }
 
-  public static ItemStack createItem(Material material, int amount, String name, String... lore) {
+  private static ItemStack createItem(Material material, int amount, String name, String... lore) {
     ItemStack thing = new ItemStack(material, amount);
     ItemMeta thingm = thing.getItemMeta();
     thingm.setDisplayName(chat(name));
@@ -114,7 +115,7 @@ public class GUI implements Listener {
     return thing;
   }
   
-  public void openChecks(Player player) {
+  private void openChecks(Player player) {
       int slot = 0;
       for (Check check : plugin.getChecks()) {
           if (plugin.getConfig().getBoolean("Checks." + check.getIdentifier() + ".enabled")) {
@@ -134,7 +135,7 @@ public class GUI implements Listener {
       player.openInventory(SophosChecks);
   }
   
-  public static ItemStack createGlass(Material material, int color, int amount, String name, String... lore) {
+  private static ItemStack createGlass(Material material, int color, int amount, String name, String... lore) {
       ItemStack thing = new ItemStack(material, amount, (short) color);
       ItemMeta thingm = thing.getItemMeta();
       thingm.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
@@ -155,10 +156,10 @@ public class GUI implements Listener {
           if (!e.getCurrentItem().hasItemMeta()) {
               return;
           }
-          if (e.getCurrentItem().getItemMeta().getDisplayName().contains(ChatColor.translateAlternateColorCodes('&', "&cChecks"))) {
+          if (e.getCurrentItem().getItemMeta().getDisplayName().contains(chat("&cChecks"))) {
               openChecks(player);
           }
-          if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', "&cReload"))) {
+          if (e.getCurrentItem().getItemMeta().getDisplayName().equals(chat("&cReload"))) {
               ItemMeta meta = e.getCurrentItem().getItemMeta();
               plugin.reloadConfig();
               meta.setDisplayName(ChatColor.GREEN + ChatColor.ITALIC.toString() + "Success!");
@@ -208,7 +209,7 @@ public class GUI implements Listener {
               }
               if (ChatColor.stripColor(check_name).equals("Back")) {
                   opensophosMain(player);
-      } 
+              }
           }
       }
   }

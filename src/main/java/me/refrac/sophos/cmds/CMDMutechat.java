@@ -14,14 +14,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import me.refrac.sophos.Core;
+import me.refrac.sophos.Sophos;
 import net.md_5.bungee.api.ChatColor;
 
 public class CMDMutechat implements CommandExecutor, Listener {
 	
-	  private Core plugin;
+	  private Sophos plugin;
 	  
-	  public CMDMutechat(Core plugin) {
+	  public CMDMutechat(Sophos plugin) {
 	     this.plugin = plugin;
 	  }
 	  	  
@@ -46,15 +46,17 @@ public class CMDMutechat implements CommandExecutor, Listener {
 	     return true;
 	  }
 
-	  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	  public void onChat(AsyncPlayerChatEvent chatEvent) {
-		 if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("MuteChat.bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
-             return;
-         }
-	     if (!isMuted) {
-	         return;
-	     }
-	     chatEvent.setCancelled(true);
-         chatEvent.getPlayer().sendMessage(chat(this.plugin.getConfig().getString("MuteChat.messageSent")));
+	  @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	  public void onChatEvent(AsyncPlayerChatEvent chatEvent) {
+	  	 if (this.plugin.getConfig().getBoolean("MuteChat.enabled") == true) {
+	  	 	if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("MuteChat.bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+	  	 		return;
+	  	 	}
+	  	 	if (!isMuted) {
+	  	 		return;
+	  	 	}
+	  	 	chatEvent.setCancelled(true);
+	  	 	chatEvent.getPlayer().sendMessage(chat(this.plugin.getConfig().getString("MuteChat.messageSent")));
+	  	 }
 	  }
 }
