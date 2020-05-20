@@ -27,7 +27,7 @@ public class AntiCapslock extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onCapslockEvent(AsyncPlayerChatEvent chatEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+      if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       int upperChar = 0;

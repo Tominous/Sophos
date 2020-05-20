@@ -32,7 +32,7 @@ public class AntiAdvertisement extends Check implements Listener {
     public void onAdvertisementEvent(AsyncPlayerChatEvent chatEvent) {
         if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
             String chatEventMessage;
-            if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+            if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
                 return;
             }
             String spaceRemoval = "\\s+";

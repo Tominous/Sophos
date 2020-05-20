@@ -5,9 +5,16 @@
 
 package me.refrac.sophos;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import me.refrac.sophos.handlers.*;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -66,6 +73,7 @@ public class Sophos extends JavaPlugin implements Listener {
     this.registerListener(this);
     this.getHandlers();
     this.addChecks();
+    this.antiTabComplete();
     Logger.SUCCESS.out("Handlers successfully loaded.");
 
     Logger.INFO.out("Loading commands...");
@@ -127,6 +135,9 @@ public class Sophos extends JavaPlugin implements Listener {
         Logger.SUCCESS.out("AntiJoinSpam successfully loaded.");
     }
     getServer().getPluginManager().registerEvents(new AntiSpam(this), this);
+    if (this.getConfig().getBoolean("Checks.AntiTabComplete.enabled") == true) {
+      Logger.SUCCESS.out("AntiTabComplete successfully loaded.");
+    }
     if (this.getConfig().getBoolean("Checks.ChatCooldown.enabled") == true) {
       Logger.SUCCESS.out("AntiSpam successfully loaded.");
     }
@@ -150,5 +161,45 @@ public class Sophos extends JavaPlugin implements Listener {
     	getServer().getPluginManager().registerEvents(new GUI(this), this);
     }
     getServer().getPluginManager().registerEvents(new AntiBotGUI(this), this);
+  }
+
+  private void antiTabComplete() {
+    // Anti Tab Completer
+    final ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+    manager.addPacketListener(new PacketAdapter (this, new PacketType[] { PacketType.Play.Client.TAB_COMPLETE })
+    {
+      @SuppressWarnings("rawtypes")
+      public void onPacketReceiving(PacketEvent event) {
+        if (this.plugin.getConfig().getBoolean("Checks.AntiTabComplete.enabled")) {
+          if ((event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE)
+                  && (!event.getPlayer().hasPermission(getConfig().getString("Checks.AntiTabComplete.bypassPermission")) || !event.getPlayer().hasPermission("sophos.bypass.*"))
+                  && (((String)event.getPacket().getStrings().read(0)).startsWith("/"))
+                  && (((String)event.getPacket().getStrings().read(0)).split(" ").length == 1)) {
+
+            event.setCancelled(true);
+
+            List<?> list = new ArrayList();
+            List<?> extra = new ArrayList();
+
+            String[] tabList = new String[list.size() + extra.size()];
+
+            for (int index = 0; index < list.size(); index++) {
+              tabList[index] = ((String)list.get(index));
+            }
+
+            for (int index = 0; index < extra.size(); index++) {
+              tabList[(index + list.size())] = ('/' + (String)extra.get(index));
+            }
+            PacketContainer tabComplete = manager.createPacket(PacketType.Play.Server.TAB_COMPLETE);
+            tabComplete.getStringArrays().write(0, tabList);
+
+            try {
+              manager.sendServerPacket(event.getPlayer(), tabComplete);
+            } catch (InvocationTargetException e) {
+              e.printStackTrace();
+            }
+          }
+        }
+      }});
   }
 }

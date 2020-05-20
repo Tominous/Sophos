@@ -43,6 +43,6 @@ public class Utils {
 
     public static String SUPPORT_URL = "https://discord.io/RefracDev";
 
-    public static String VERSION = "2.2.6";
+    public static String VERSION = "2.2.7";
 
 }

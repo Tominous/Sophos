@@ -3,7 +3,7 @@ version: ${project.version}
 authors: [Refrac, AnnaDev]
 main: me.refrac.sophos.Sophos
 description: ${project.description}
-depend: [Vault]
+depend: [Vault, ProtocolLib]
 softdepend: [PlaceholderAPI]
 
 commands:

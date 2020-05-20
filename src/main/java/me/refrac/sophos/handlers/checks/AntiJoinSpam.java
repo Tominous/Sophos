@@ -29,7 +29,7 @@ public class AntiJoinSpam extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onJoinEvent(PlayerJoinEvent joinEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (joinEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission"))) {
+      if (joinEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || joinEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = joinEvent.getPlayer();
@@ -44,7 +44,7 @@ public class AntiJoinSpam extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onQuitEvent(PlayerQuitEvent quitEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (quitEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass")) {
+      if (quitEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") || quitEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = quitEvent.getPlayer();
@@ -59,7 +59,7 @@ public class AntiJoinSpam extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onMovementEvent(PlayerMoveEvent movementEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (movementEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") && movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+      if (movementEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = movementEvent.getPlayer();
@@ -75,7 +75,7 @@ public class AntiJoinSpam extends Check implements Listener {
   public void onMovementEvent2(PlayerMoveEvent movementEvent) {
       if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
         if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".GUI") == true) {
-          if (movementEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") && movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+          if (movementEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") || movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
               return;
           }
           Player eventUser = movementEvent.getPlayer();
@@ -90,7 +90,7 @@ public class AntiJoinSpam extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onChatEvent(AsyncPlayerChatEvent chatEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (chatEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+      if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = chatEvent.getPlayer();
@@ -106,7 +106,7 @@ public class AntiJoinSpam extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onCommandEvent(PlayerCommandPreprocessEvent commandEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (commandEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") && commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+      if (commandEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") || commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = commandEvent.getPlayer();

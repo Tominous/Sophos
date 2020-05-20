@@ -33,7 +33,7 @@ public class AntiCommandSpam extends Check implements Listener {
   @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
   public void onSpamEvent(PlayerCommandPreprocessEvent commandEvent) {
     if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (commandEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+      if (commandEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       final Player eventUser = commandEvent.getPlayer();

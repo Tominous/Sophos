@@ -301,4 +301,11 @@ Checks:
      messageSent: "&c&lSERVER >> &fYou can't use Unicode Characters, we are sorry about that."
      # What should the bypass permission be?
      bypassPermission: "sophos.bypass.antiunicode"
+  # AntiTabComplete prevents people from
+  # tabbing all of your server commands
+  AntiTabComplete:
+     # Do you want it enabled or not?
+     enabled: true
+     # What should the bypass permission be?
+     bypassPermission: "sophos.bypass.antitab"
 # END OF THE CONFIGURATION FILE
