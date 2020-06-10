@@ -94,8 +94,6 @@ Checks:
      messageSent: "&c&lSERVER >> &fAdvertising is forbidden please do not advertise."
      # What should the bypass permission be?
      bypassPermission: "sophos.bypass.antiad"
-     blocked-worlds:
-     - test123
   # Anti-Capslock prevents people from using
   # too much Capslock or in another word too much
   # uppercase characters, this detects the specified
