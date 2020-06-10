@@ -1,9 +1,9 @@
 name: Sophos
-version: ${project.version}
+version: '2.2.8'
 authors: [Refrac, AnnaDev]
 main: me.refrac.sophos.Sophos
-description: ${project.description}
-depend: [Vault, ProtocolLib]
+description: Sophos Chat Protection
+depend: [Vault]
 softdepend: [PlaceholderAPI]
 
 commands:
@@ -14,10 +14,8 @@ commands:
     aliases: sc
   sctoggle:
     description: StaffChat toggle command
-  mutechat: 
-    description: MuteChat command
-  clearchat:
-    descripttion: ClearChat command
+  chat:
+    description: Handles muteing or clearing the chat
 
 permissions:
   sophos.silent.join:

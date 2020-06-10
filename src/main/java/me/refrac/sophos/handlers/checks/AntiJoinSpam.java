@@ -5,6 +5,7 @@ import java.util.Map;
 
 import me.refrac.sophos.Sophos;
 import me.refrac.sophos.gui.AntiBotGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -14,22 +15,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import me.refrac.sophos.handlers.Check;
+import org.bukkit.plugin.Plugin;
 
 public class AntiJoinSpam extends Check implements Listener {
 
-  private final Sophos plugin;
+  private Sophos sophos;
   private static Map<Player, Location> storedData;
 
-  public AntiJoinSpam(Sophos plugin) {
-	super("AntiJoinSpam", "AntiJoinSpam", plugin);
-    this.plugin = plugin;
+  public AntiJoinSpam(Plugin plugin) {
+	super("AntiJoinSpam", "AntiJoinSpam", (Sophos)plugin);
+    sophos = (Sophos)plugin;
     this.storedData = new HashMap<>();
   }
   
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(ignoreCancelled = true)
   public void onJoinEvent(PlayerJoinEvent joinEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (joinEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || joinEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled") || joinEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+      if (joinEvent.getPlayer().hasPermission(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || joinEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = joinEvent.getPlayer();
@@ -38,12 +40,19 @@ public class AntiJoinSpam extends Check implements Listener {
         return;
       }
       this.storedData.put(eventUser, userLocation);
+      if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".GUI") == true) {
+        Bukkit.getScheduler().runTask(sophos, new Runnable() {
+          public void run() {
+          AntiBotGUI.openAntiBotMain(eventUser);
+          }
+        });
+      }
     }
   }
   
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(ignoreCancelled = true)
   public void onQuitEvent(PlayerQuitEvent quitEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled") || quitEvent.getPlayer().hasPermission("sophos.bypass.*")) {
       if (quitEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") || quitEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
@@ -55,11 +64,11 @@ public class AntiJoinSpam extends Check implements Listener {
       } 
     } 
   }
-  
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+
+  @EventHandler(ignoreCancelled = true)
   public void onMovementEvent(PlayerMoveEvent movementEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (movementEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+      if (movementEvent.getPlayer().hasPermission(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = movementEvent.getPlayer();
@@ -71,48 +80,52 @@ public class AntiJoinSpam extends Check implements Listener {
   }
 
   // AntiBotGUI movement event
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(ignoreCancelled = true)
   public void onMovementEvent2(PlayerMoveEvent movementEvent) {
-      if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-        if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".GUI") == true) {
+      if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+        if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".GUI") == true) {
           if (movementEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") || movementEvent.getPlayer().hasPermission("sophos.bypass.*")) {
               return;
           }
           Player eventUser = movementEvent.getPlayer();
           if (this.storedData.containsKey(eventUser) && !AntiBotGUI.getPassedAntiBot().contains(eventUser)) {
               eventUser.teleport(movementEvent.getFrom());
-              AntiBotGUI.openAntiBotMain(eventUser);
+            Bukkit.getScheduler().runTask(sophos, new Runnable() {
+              public void run() {
+                AntiBotGUI.openAntiBotMain(eventUser);
+              }
+            });
           }
       }
     }
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(ignoreCancelled = true)
   public void onChatEvent(AsyncPlayerChatEvent chatEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+      if (chatEvent.getPlayer().hasPermission(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = chatEvent.getPlayer();
       if (this.storedData.containsKey(eventUser)) {
         chatEvent.setCancelled(true);
-        chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
+        chatEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
       } else {
         return;
       } 
     } 
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(ignoreCancelled = true)
   public void onCommandEvent(PlayerCommandPreprocessEvent commandEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
       if (commandEvent.getPlayer().hasPermission("Checks." + this.getIdentifier() + ".bypass") || commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       Player eventUser = commandEvent.getPlayer();
       if (this.storedData.containsKey(eventUser)) {
         commandEvent.setCancelled(true);
-        commandEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
+        commandEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".messageSent")));
       } else {
         return;
       }

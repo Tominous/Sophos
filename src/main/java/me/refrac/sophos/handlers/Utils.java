@@ -28,7 +28,7 @@ public class Utils {
         return colorFormat(player, message);
     }
 
-    public static String chat(String s) {
+    public static String color(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
 
@@ -43,6 +43,8 @@ public class Utils {
 
     public static String SUPPORT_URL = "https://discord.io/RefracDev";
 
-    public static String VERSION = "2.2.7";
+    public static String VERSION = "2.2.8";
+
+    public static String PREFIX = "&8[&cSophos&8] ";
 
 }

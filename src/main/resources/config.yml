@@ -8,83 +8,26 @@
 # By Refrac & AnnaDev                             #
 #                                                 #
 #=================================================#
-# Support Discord: https://discord.io/RefracDev
+# Discord: https://discord.io/RefracDev           #
 #=================================================#
 # PlaceholderAPI is supported
-# Custom Variables/Placeholders - Not all of these are usable on each message
+# Custom Variables/Placeholders
 # {player} - Get the player's name
-# {displayname} - Get the player's displayname/nickname
+# {displayname} - Get the player's nickname
 # {arrowright} - Unicode arrow
 # {message} - The player's message
-# {time} - Used to get the remaining time on a chat/command cooldown
+# {time} - Get the remaining time on a chat/command cooldown
 #=================================================#
 # This is a debug option for the developers to use to help fix an issue easier
 Debug:
-  # Do you want it enabled or not?
-  enabled: true
-Chat:
-  # Do you want it enabled or not?
-  enabled: false
-  # What should the chat format be?
-  format: "&f{player} &8&l{arrowright}&f {message}"
-GUI:
-  # Do you want it enabled or not?
-  enabled: true
-MuteChat:
-  # Do you want it enabled or not?
-  enabled: false
-  # Do you want it enabled or not?
-  broadcast: true
-  # What should the messages be? {player} also works for console
-  broadcastMutedSent: "&fServer chat has been muted by &e{player}&f."
-  broadcastUnMutedSent: "&fServer chat has been unmuted by &e{player}&f."
-  chatMutedSent: "&fServer chat has been muted by &e{player}&f."
-  chatUnMutedSent: "&fServer chat has been unmuted by &e{player}&f."
-  # This message is sent to the player if you don't have the bypass permission
-  messageSent: "&cChat is currently disabled."
-  # What should the bypass permission be?
-  bypassPermission: "sophos.bypass.mutechat"
-ClearChat:
-  # Do you want it enabled or not?
-  enabled: false
-  # Do you want it enabled or not?
-  broadcast: true
-  # What should the messages be? {player} also works for console
-  broadcastClearedSent: "&fServer chat has been cleared by &e{player}&f."
-  # This message is only sent to the player who executed /clearchat
-  chatClearedSent: "&fServer chat has been cleared."
-  # The amount of lines to be sent before the chat cleared messages
-  lines: 100
-Join-Quit:
-  # Do you want it enabled or not?
-  enabled: false
-  # What should the messages be?
-  firstjoin_message: "&fWelcome &e{player} &fto &c&lSERVER!"
-  join_message: "&e{player} &fhas joined."
-  silent_join_message: "&fWelcome back, &e{player}&f."
-  quit_message: "&e{player} &fhas left."
-  silent_quit_message: "&fGoodbye, &e{player}."
-Messages:
-  # Do you want it enabled or not?
-  enabled: false
-  # What should the messages be?
-  toggleOn: "&7StaffChat has been toggled &aON."
-  toggleOff: "&7StaffChat has been toggled &cOFF."
-  # What should the chat format be?
-  format: "&8(&4&lSC&8) &6&l{player} &8&l{arrowright} &f&l{message}"
-  # This will be used for other no permission messages so don't make it specific to staffchat
-  no-permission: "&cSorry you don't have permission."
-Alerts:
-  AntiSwear:
-     # Do you want it enabled or not?
-     enabled: false
-     # What should the message be?
-     messageSent: "&cSophos &7{arrowright} &c{player} &7is attempting to &6swear&7."
-  AntiAdvertisement:
-     # Do you want it enabled or not?
-     enabled: false
-     # What should the message be?
-     messageSent: "&cSophos &7{arrowright} &c{player} &7is attempting to &6advertise&7."
+   # Do you want it enabled or not?
+   enabled: true
+# The Sophos GUI is /sohpos gui
+# allows you to reload the config files or
+# enable/disable any checks
+Sophos_GUI:
+   # Do you want it enabled or not?
+   enabled: true
 Checks:
   # Anti-Swear allows you to prevent users to
   # send an Message to the Chat that is in the
@@ -101,28 +44,24 @@ Checks:
      kick: false
      # command without /
      kickCommand: "kick {player} &cSophos &7{arrowright} &fPlease do not swear!"
-     # Do you want it enabled or not?
-     # This will change the lists to be case-sensitive
-     caseSensitive: true
      # What words should get blocked?
      # Example:
-     # - scumbag
-     # - ass
+     # - "scumbag"
+     # - "ass"
      blockedWords:
-     - ass
-     - bitch
-     - cock
-     - dick
-     - shit
-     - stupid
-     - whore
-     - cunt
-     - nig
+     - "ass"
+     - "bitch"
+     - "dick"
+     - "shit"
+     - "stupid"
+     - "whore"
+     - "cunt"
+     - "nig"
      # What words should be whitelisted?
      # Example:
-     # - bass
+     # - "bass"
      whitelistedWords: 
-     - bass
+     - "bass"
      # What should the message be?
      messageSent: "&c&lSERVER >> &fSwearing is forbidden please do not use bad words."
      # What should the bypass permission be?
@@ -142,8 +81,10 @@ Checks:
      kickCommand: "kick {player} &cSophos &7{arrowright} &fPlease do not advertise!"
      # What extensions should get blocked?
      # Unnecessary, covered by patterns.
-     blockedExtensions: []
-     # Whitelist sites?
+     blockedExtensions:
+     - https://blockedsite.com
+     - https://blockedsite.net
+    # Whitelist sites?
      # Example:
      # - "https://www.google.com"
      whitelistSites:
@@ -153,6 +94,8 @@ Checks:
      messageSent: "&c&lSERVER >> &fAdvertising is forbidden please do not advertise."
      # What should the bypass permission be?
      bypassPermission: "sophos.bypass.antiad"
+     blocked-worlds:
+     - test123
   # Anti-Capslock prevents people from using
   # too much Capslock or in another word too much
   # uppercase characters, this detects the specified
@@ -215,31 +158,31 @@ Checks:
      # Example:
      # - plugins
      disabledCommands:
-     - 'plugins'
-     - 'pl'
-     - 'version'
-     - 'ver'
-     - 'about'
-     - 'help'
-     - 'ehelp'
-     - '?'
-     - 'icanhasbukkit'
-     - 'timings'
-     - 'bukkit:plugins'
-     - 'bukkit:pl'
-     - 'bukkit:version'
-     - 'bukkit:ver'
-     - 'bukkit:about'
-     - 'bukkit:help'
-     - 'bukkit:?'
-     - 'bukkit:timings'
-     - 'minecraft:plugins'
-     - 'minecraft:pl'
-     - 'minecraft:version'
-     - 'minecraft:ver'
-     - 'minecraft:about'
-     - 'minecraft:help'
-     - 'minecraft:?'
+     - "plugins"
+     - "pl"
+     - "version"
+     - "ver"
+     - "about"
+     - "help"
+     - "ehelp"
+     - "?"
+     - "icanhasbukkit"
+     - "timings"
+     - "bukkit:plugins"
+     - "bukkit:pl"
+     - "bukkit:version"
+     - "bukkit:ver"
+     - "bukkit:about"
+     - "bukkit:help"
+     - "bukkit:?"
+     - "bukkit:timings"
+     - "minecraft:plugins"
+     - "minecraft:pl"
+     - "minecraft:version'"
+     - "minecraft:ver"
+     - "minecraft:about"
+     - "minecraft:help"
+     - "minecraft:?"
      # What should the message be?
      disabledCommand: "&c&lSERVER >> &fYou cannot execute that command."
      # What should the bypass permission be?
@@ -247,12 +190,14 @@ Checks:
   # AntiJoinSpam prevents people from sending messages
   # once they Join the server basically they have to move
   # a block before they can send any commands or messages.
-  # Optionally you can have a GUI pop up instead.
+  # Optionally you can have a SophosGUI pop up instead.
   AntiJoinSpam:
      # Do you want it enabled or not?
      enabled: true
      # Do you want it enabled or not?
-     # Note: This will be an extra preventive check for Bots.
+     # Note: This will be an extra preventive check for Bots
+     # Use at your own risk as this is fairly new
+     # and may contain bugs
      GUI: false
      # The passed item name
      GUI_passed_name: "Pass"
@@ -301,11 +246,4 @@ Checks:
      messageSent: "&c&lSERVER >> &fYou can't use Unicode Characters, we are sorry about that."
      # What should the bypass permission be?
      bypassPermission: "sophos.bypass.antiunicode"
-  # AntiTabComplete prevents people from
-  # tabbing all of your server commands
-  AntiTabComplete:
-     # Do you want it enabled or not?
-     enabled: true
-     # What should the bypass permission be?
-     bypassPermission: "sophos.bypass.antitab"
 # END OF THE CONFIGURATION FILE

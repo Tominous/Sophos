@@ -10,31 +10,32 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import me.refrac.sophos.handlers.Check;
+import org.bukkit.plugin.Plugin;
 
 public class BlockedCommands extends Check implements Listener {
 
-  private final Sophos plugin;
+  private Sophos sophos;
 
-  public BlockedCommands(Sophos plugin) {
-    super("CommandBlocker", "BlockedCommands", plugin);
-    this.plugin = plugin;
+  public BlockedCommands(Plugin plugin) {
+    super("CommandBlocker", "BlockedCommands", (Sophos)plugin);
+    sophos = (Sophos)plugin;
   }
 
-  
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+
+  @EventHandler(ignoreCancelled = true)
   public void onBlockedCommandEvent(PlayerCommandPreprocessEvent commandEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (commandEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+      if (commandEvent.getPlayer().hasPermission(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || commandEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
-      List<String> disableCommands = this.plugin.getConfig().getStringList("Checks." + this.getIdentifier() + ".disabledCommands");
+      List<String> disableCommands = this.sophos.getConfig().getStringList("Checks." + this.getIdentifier() + ".disabledCommands");
       for (Object message : disableCommands) {
         if (!commandEvent.getMessage().equalsIgnoreCase("/" + message))
           continue; 
-        if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
-        	commandEvent.getPlayer().kickPlayer(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".kickMessage"));
+        if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".kick") == true) {
+        	commandEvent.getPlayer().kickPlayer(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".kickMessage"));
         }
-        commandEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".disabledCommand")));
+        commandEvent.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".disabledCommand")));
         commandEvent.setCancelled(true);
       } 
     } 

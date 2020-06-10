@@ -7,27 +7,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import me.refrac.sophos.handlers.Check;
+import org.bukkit.plugin.Plugin;
 
 public class AutoDot extends Check implements Listener {
 
-  private final Sophos plugin;
+  private Sophos sophos;
 
-  public AutoDot(Sophos plugin) {
-    super("AutoDot", "AutoDot", plugin);
-    this.plugin = plugin;
+  public AutoDot(Plugin plugin) {
+    super("AutoDot", "AutoDot", (Sophos)plugin);
+    sophos = (Sophos)plugin;
   }
 
-  @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+  @EventHandler(ignoreCancelled = true)
   public void onDotEvent(AsyncPlayerChatEvent chatEvent) {
-    if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-      if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+    if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+      if (chatEvent.getPlayer().hasPermission(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
         return;
       }
       String chatMessage = chatEvent.getMessage();
       String pattern = "(?i)[a-z]";
       String lastChar = chatMessage.substring(chatMessage.length() - 1);
       if (lastChar.matches(pattern)) {
-        chatMessage = String.valueOf(chatMessage) + ".";
+        chatMessage = chatMessage + ".";
         chatEvent.setMessage(chatMessage);
       } 
     } 

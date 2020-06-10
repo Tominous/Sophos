@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.refrac.sophos.Sophos;
+import me.refrac.sophos.handlers.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.refrac.sophos.handlers.Check;
 
-public class GUI implements Listener {
+public class SophosGUI implements Listener {
 
   public static Inventory SophosMain = Bukkit.createInventory(null, 36, ChatColor.RED + "Sophos");
   private static Inventory SophosChecks = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Checks");
@@ -30,13 +31,13 @@ public class GUI implements Listener {
   
   public static String chat(String s) { return ChatColor.translateAlternateColorCodes('&', s); }
   
-  public GUI(Sophos plugin) {
-    GUI.plugin = plugin;
+  public SophosGUI(Sophos plugin) {
+    SophosGUI.plugin = plugin;
     ItemStack checks = createItem(Material.COMPASS, 1, "&cChecks");
-    ItemStack info = createItem(Material.BOOK, 1, "&aInfo", new String[0]);
-    ItemStack reload = createItem(Material.LAVA_BUCKET, 1, "&cReload", new String[0]);
+    ItemStack info = createItem(Material.BOOK, 1, "&aInfo");
+    ItemStack reload = createItem(Material.LAVA_BUCKET, 1, "&cReload");
     ItemStack close = createItem(Material.ARROW, 1, "&cClose");
-    ItemStack support = createItem(Material.BOOK, 1, "&aSupport", new String[0]);
+    ItemStack support = createItem(Material.BOOK, 1, "&aSupport");
     ItemMeta checksm = checks.getItemMeta();
     ItemMeta infom = info.getItemMeta();
     ItemMeta reloadm = reload.getItemMeta();
@@ -90,7 +91,7 @@ public class GUI implements Listener {
   private static ArrayList<String> reloadLore() {
    ArrayList<String> list = new ArrayList<>();
 	list.add("");
-	list.add(chat("&7Reloads the config file."));
+	list.add(chat("&7Reloads the config files."));
 	return list;
   }
   
@@ -143,8 +144,8 @@ public class GUI implements Listener {
       thing.setItemMeta(thingm);
       return thing;
   }
-  
-  @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+
+    @EventHandler(ignoreCancelled = true)
   public void onInventoryClick(final InventoryClickEvent e) {
 	  if (e.getView().getTitle().contains("Sophos")) {
           Player player = (Player) e.getWhoClicked();
@@ -162,6 +163,7 @@ public class GUI implements Listener {
           if (e.getCurrentItem().getItemMeta().getDisplayName().equals(chat("&cReload"))) {
               ItemMeta meta = e.getCurrentItem().getItemMeta();
               plugin.reloadConfig();
+              plugin.reloadMessages();
               meta.setDisplayName(ChatColor.GREEN + ChatColor.ITALIC.toString() + "Success!");
               e.getCurrentItem().setItemMeta(meta);
               new BukkitRunnable() {
@@ -173,11 +175,11 @@ public class GUI implements Listener {
                   }
               }.runTaskLater(plugin, 40L);
           }
-          if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Quit")) {
+          if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Close")) {
               player.getOpenInventory().close();
           }
           if (e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "Support")) {
-              player.sendMessage(chat("&c&lDiscord: &fhttps://discord.gg/acpxjpF"));
+              player.sendMessage(chat(Utils.SUPPORT_URL));
               player.getOpenInventory().close();
           }
       } else if (e.getView().getTitle().contains("Checks")) {

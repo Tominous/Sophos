@@ -1,0 +1,77 @@
+#=================================================#
+#                                                 #
+#   ____    ___    ____    _   _    ___     ____  #
+#  / ___|  / _    |  _    | | | |  / _     / ___| #
+#    ___  | | | | | |_) | | |_| | | | | |    ___  #
+#  ___) | | |_| | |  __/  |  _  | | |_| |  ___) | #
+# |____/    ___/  |_|     |_| |_|   ___/  |____/  #
+# By Refrac & AnnaDev                             #
+#                                                 #
+#=================================================#
+# Discord: https://discord.io/RefracDev           #
+#=================================================#
+# PlaceholderAPI is supported
+# Custom Variables/Placeholders
+# {player} - Get the player's name
+# {displayname} - Get the player's nickname
+# {arrowright} - Unicode arrow
+# {message} - The player's message
+#=================================================#
+Messages:
+  Chat:
+    # Do you want it enabled or not?
+    chat_enabled: false
+    # What should the default chat format be?
+    chat_format: "&a{player}: &f{message}"
+    # Do you want it enabled or not?
+    mutechat_enabled: false
+    # Do you want it enabled or not?
+    mutechat_broadcast: true
+    # What should the messages be? {player} also works for console
+    broadcastMutedSent: "&fServer chat has been muted by &e{player}&f."
+    broadcastUnMutedSent: "&fServer chat has been unmuted by &e{player}&f."
+    chatMutedSent: "&fServer chat has been muted."
+    chatUnMutedSent: "&fServer chat has been unmuted."
+    # This message is sent to the player if you don't have the bypass permission
+    messageSent: "&cChat is currently disabled."
+    # What should the bypass permission be?
+    bypassPermission: "sophos.bypass.mutechat"
+    # Do you want it enabled or not?
+    clearchat_enabled: false
+    # Do you want it enabled or not?
+    clearchat_broadcast: true
+    # What should the messages be? {player} also works for console
+    broadcastClearedSent: "&fServer chat has been cleared by &e{player}&f."
+    # This message is only sent to the player who executed /clearchat
+    chatClearedSent: "&fServer chat has been cleared."
+    # The amount of lines to be sent before the chat cleared messages
+    lines: 100
+    # Do you want it enabled or not?
+    join_quit_enabled: false
+    # What should the messages be?
+    first_join_message: "&fWelcome &e{player} &fto &c&lSERVER!"
+    join_message: "&e{player} &fhas joined."
+    silent_join_message: "&fWelcome back, &e{player}&f."
+    quit_message: "&e{player} &fhas left."
+    silent_quit_message: "&fGoodbye, &e{player}."
+    # Do you want it enabled or not?
+    staffchat_enabled: false
+    # What should the messages be?
+    staffchat_toggle_on_message: "&7StaffChat has been toggled &aON&7."
+    staffchat_toggle_off_message: "&7StaffChat has been toggled &cOFF&7."
+    # What should the chat format be?
+    staffchat_format: "&8(&4&lSC&8) &6&l{player} &8&l{arrowright} &f&l{message}"
+    # This will be used for other no permission messages so don't make it specific to staffchat
+    no-permission: "&cSorry you don't have permission."
+Alerts:
+  AntiSwear:
+    # Do you want it enabled or not?
+    enabled: false
+    # What should the message be?
+    messageSent: "&c&lSophos &8{arrowright} &c{player} &7is attempting to &6swear&7."
+  AntiAdvertisement:
+    # Do you want it enabled or not?
+    enabled: false
+    # What should the message be?
+    messageSent: "&c&lSophos &8{arrowright} &c{player} &7is attempting to &6advertise&7."
+# END OF THE MESSAGES FILE

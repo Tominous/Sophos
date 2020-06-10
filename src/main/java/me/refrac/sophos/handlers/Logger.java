@@ -17,7 +17,7 @@ public enum Logger {
     Logger(char color) { this.color = color; }
 
     public void out(String message) {
-        message = Utils.chat(String.format("%s > &%c%s", new Object[] { "&bSophos", Character.valueOf(this.color), message }));
+        message = Utils.color(String.format("%s > &%c%s", new Object[] { "&cSophos", Character.valueOf(this.color), message }));
         Bukkit.getConsoleSender().sendMessage(message);
     }
 }

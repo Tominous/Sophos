@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Refrac
+ * If you have any questions please email refracplaysmc@gmail.com or reach me on Discord
+ */
+
 package me.refrac.sophos;
 
 import me.refrac.sophos.handlers.Check;
@@ -8,13 +13,15 @@ import java.util.List;
 public class SophosAPI {
 
     private static Sophos sophos;
-    private Plugin plugin;
 
     public SophosAPI(Plugin plugin) {
-        this.plugin = plugin;
-        sophos = (Sophos) plugin;
+        sophos = (Sophos)plugin;
     }
 
+    /**
+     * @return All of the current checks/chat filters within Sophos.
+     * You can create/register your own as well.
+     */
     public static List<Check> getChecks() {
         return sophos.getChecks();
     }

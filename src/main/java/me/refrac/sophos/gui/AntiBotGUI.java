@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AntiBotGUI implements Listener {
 
@@ -22,17 +21,17 @@ public class AntiBotGUI implements Listener {
 
     private static String chat(String s) { return ChatColor.translateAlternateColorCodes('&', s); }
 
-    public static Inventory AntiBotMain = Bukkit.createInventory(null, 45, ChatColor.RED + "AntiBot");
+    private static Inventory AntiBotMain = Bukkit.createInventory(null, 45, ChatColor.RED + "AntiBot");
 
     private static ArrayList<Player> passedAntiBot;
 
     public static ArrayList<Player> getPassedAntiBot() {
-        return new ArrayList<>(passedAntiBot);
+        return passedAntiBot;
     }
 
     public AntiBotGUI(Sophos plugin) {
         AntiBotGUI.plugin = plugin;
-        this.passedAntiBot = new ArrayList<>();
+        passedAntiBot = new ArrayList<>();
         AntiBotMain.setItem(22, Glass1());
         for (int i = 0; i < 45; i++) {
             if (AntiBotMain.getItem(i) == null) {
@@ -62,15 +61,6 @@ public class AntiBotGUI implements Listener {
 
     public static void openAntiBotMain(Player player) { player.openInventory(AntiBotMain); }
 
-    private static ItemStack createItem(Material material, int amount, String name, String... lore) {
-        ItemStack thing = new ItemStack(material, amount);
-        ItemMeta thingm = thing.getItemMeta();
-        thingm.setDisplayName(chat(name));
-        thingm.setLore(Arrays.asList(lore));
-        thing.setItemMeta(thingm);
-        return thing;
-    }
-
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(final InventoryClickEvent e) {
         if (e.getView().getTitle().contains("AntiBot")) {
@@ -85,7 +75,7 @@ public class AntiBotGUI implements Listener {
             }
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals(chat(plugin.getConfig().getString("Checks.AntiJoinSpam.GUI_passed_name")))) {
                 player.sendMessage(chat(plugin.getConfig().getString("Checks.AntiJoinSpam.passed_message").replace("{arrowright}", "\u00BB")));
-                this.passedAntiBot.add(player);
+                passedAntiBot.add(player);
                 player.getOpenInventory().close();
             }
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals("Fail")) {

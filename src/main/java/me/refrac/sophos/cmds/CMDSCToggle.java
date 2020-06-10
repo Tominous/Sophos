@@ -22,13 +22,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.plugin.Plugin;
 
 public class CMDSCToggle implements CommandExecutor, Listener {
 	
-	private Sophos plugin;
-	  
-	public CMDSCToggle(Sophos plugin) {
-	    this.plugin = plugin;
+	private Sophos sophos;
+
+	public CMDSCToggle(Plugin plugin) {
+		sophos = (Sophos)plugin;
 	    this.toggle = new ArrayList<>();
 	}
 	
@@ -41,35 +42,32 @@ public class CMDSCToggle implements CommandExecutor, Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
 		if (!(sender instanceof Player)) return false;
-			Player player = (Player)sender;
-			if (args.length == 0) {
-			if (!player.hasPermission("sophos.staff")) {
-				player.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
-				return false;
-			}
-			if (this.toggle.contains(player)) {
-				this.toggle.remove(player);
-				player.sendMessage(chat( Sophos.plugin.getConfig().getString("Messages.toggleOff")));
-				return false;
-			}
-			this.toggle.add(player);
-			player.sendMessage(chat( Sophos.plugin.getConfig().getString("Messages.toggleOn")));
-			return true;
-	    }
-		return false;
+		Player player = (Player)sender;
+		if (!player.hasPermission("sophos.staff")) {
+			player.sendMessage(chat(sophos.getMessages().getString("Messages.Chat.no-permission")));
+			return false;
+		}
+		if (this.toggle.contains(player)) {
+			this.toggle.remove(player);
+			player.sendMessage(chat(sophos.getMessages().getString("Messages.Chat.staffchat_toggle_off_message")));
+			return false;
+		}
+		this.toggle.add(player);
+		player.sendMessage(chat(sophos.getMessages().getString("Messages.Chat.staffchat_toggle_on_message")));
+		return true;
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent chatEvent) {
-		if (this.plugin.getConfig().getBoolean("Messages.enabled") == true) {
+		if (this.sophos.getMessages().getBoolean("Messages.Chat.staffchat_enabled") == true) {
 			Player player = chatEvent.getPlayer();
 
-			String finalString = plugin.getConfig().getString("Messages.format");
+			String finalString = sophos.getMessages().getString("Messages.Chat.staffchat_format");
 
 			finalString = Utils.setupPlaceholderAPI(player, finalString);
 			finalString = Utils.colorFormat(player, finalString);
 			finalString = Placeholders.setPlaceholders(player, finalString);
-			finalString = Utils.chat(finalString);
+			finalString = Utils.color(finalString);
 			finalString = finalString.replace("{message}", chatEvent.getMessage());
 			finalString = finalString.replaceAll("%", "%%");
 			finalString = Utils.replaceAllVariables(player, finalString);

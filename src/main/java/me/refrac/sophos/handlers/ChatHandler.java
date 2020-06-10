@@ -6,40 +6,39 @@
 package me.refrac.sophos.handlers;
 
 import me.refrac.sophos.Sophos;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.plugin.Plugin;
 
 public class ChatHandler implements Listener {
 
-	private final Sophos plugin;
+	private Sophos sophos;
+	private Plugin plugin;
 
-    public ChatHandler(Sophos plugin) {
+    public ChatHandler(Plugin plugin) {
         this.plugin = plugin;
+        sophos = (Sophos)plugin;
     }
 
-    @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
+    @EventHandler(ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent chatEvent) {
-    	if (plugin.getConfig().getBoolean("Chat.enabled") == true) {
+    	if (this.sophos.getMessages().getBoolean("Messages.Chat.chat_enabled") == true) {
             Player player = chatEvent.getPlayer();
+            String message = chatEvent.getMessage();
+            String format = sophos.getMessages().getString("Messages.Chat.chat_format");
 
-            String chatFormat = plugin.getConfig().getString("Chat.format");
+            format = Utils.setupPlaceholderAPI(player, format);
+            format = Utils.colorFormat(player, format);
+            format = Placeholders.setPlaceholders(player, format);
+            format = Utils.color(format);
+            format = format.replace("{message}", message);
+            format = format.replaceAll("%", "%%");
+            format = Utils.replaceAllVariables(player, format);
 
-            chatFormat = Utils.setupPlaceholderAPI(player, chatFormat);
-            chatFormat = Utils.colorFormat(player, chatFormat);
-            chatFormat = Placeholders.setPlaceholders(player, chatFormat);
-            chatFormat = Utils.chat(chatFormat);
-            chatFormat = chatFormat.replace("{message}", chatEvent.getMessage());
-            chatFormat = chatFormat.replaceAll("%", "%%");
-            chatFormat = Utils.replaceAllVariables(player, chatFormat);
-
-            chatEvent.setFormat(chatFormat);
+            chatEvent.setFormat(format);
         }
     }
 }

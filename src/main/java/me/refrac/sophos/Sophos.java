@@ -5,18 +5,17 @@
 
 package me.refrac.sophos;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
 import me.refrac.sophos.handlers.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,10 +24,12 @@ import me.refrac.sophos.gui.*;
 import me.refrac.sophos.handlers.checks.*;
 
 public class Sophos extends JavaPlugin implements Listener {
-	
-  public static Sophos plugin;
 
-  public List<Check> Checks;
+  private final List<Check> Checks;
+  private File mfile;
+  private FileConfiguration messages;
+  private File cfile;
+  private FileConfiguration config;
     
   public Sophos() {
     super();
@@ -44,15 +45,15 @@ public class Sophos extends JavaPlugin implements Listener {
     this.Checks.add(new AntiSwear(this));
     this.Checks.add(new AntiUnicode(this));
     this.Checks.add(new AutoCorrect(this));
-    this.Checks.add(new BlockedCommands(this));
     this.Checks.add(new AutoDot(this));
+    this.Checks.add(new BlockedCommands(this));
   }
   
   @Override
   public void onEnable() {
     // Plugin startup logic
     long startTiming = System.currentTimeMillis();
-    Logger.INFO.out("Enabling Sophos...");
+    Logger.INFO.out("Enabling Sophos");
 
     new SophosAPI(this);
 
@@ -64,31 +65,27 @@ public class Sophos extends JavaPlugin implements Listener {
     Logger.NONE.out(ChatColor.LIGHT_PURPLE + " |____/    ___/  |_|     |_| |_|   ___/  |____/  " + ChatColor.YELLOW + "v" + Utils.VERSION);
     Logger.NONE.out("");
 
-    Logger.INFO.out("Loading config files...");
-    getConfig().options().copyDefaults(true);
-    saveDefaultConfig();
-    Logger.SUCCESS.out("Config files successfully loaded.");
+    Logger.INFO.out("Loading config files");
+    createConfig();
+    createMessages();
+    Logger.SUCCESS.out("Successfully loaded the config files");
 
-    Logger.INFO.out("Loading handlers...");
+    Logger.INFO.out("Loading handlers");
     this.registerListener(this);
     this.getHandlers();
     this.addChecks();
-    this.antiTabComplete();
-    Logger.SUCCESS.out("Handlers successfully loaded.");
+    Logger.SUCCESS.out("Successfully loaded the handlers");
 
-    Logger.INFO.out("Loading commands...");
+    Logger.INFO.out("Loading commands");
     getCommand("sophos").setExecutor(new CMDSophos(this));
-    if (this.getConfig().getBoolean("Messages.enabled") == true) {
+    if (this.getMessages().getBoolean("Messages.Chat.staffchat_enabled") == true) {
         getCommand("staffchat").setExecutor(new CMDStaffChat(this));
         getCommand("sctoggle").setExecutor(new CMDSCToggle(this));
     }
-    if (this.getConfig().getBoolean("MuteChat.enabled") == true) {
-        getCommand("mutechat").setExecutor(new CMDMutechat(this));
+    if (this.getMessages().getBoolean("Messages.Chat.chat_enabled") == true) {
+        getCommand("chat").setExecutor(new CMDChat(this));
     }
-    if (this.getConfig().getBoolean("ClearChat.enabled") == true) {
-        getCommand("clearchat").setExecutor(new CMDClearChat(this));
-    }
-    Logger.SUCCESS.out("Commands successfully loaded.");
+    Logger.SUCCESS.out("Successfully loaded the commands");
 
     Logger.SUCCESS.out("Sophos successfully enabled. (" + (System.currentTimeMillis() - startTiming) + "ms)");
     Logger.INFO.out("Report any issues or errors directly to the developers @ " + Utils.SUPPORT_URL);
@@ -96,6 +93,7 @@ public class Sophos extends JavaPlugin implements Listener {
  
   @Override
   public void onDisable() {
+    Logger.INFO.out("Shutting down Sophos");
     Logger.SUCCESS.out("Sophos successfully disabled.");
     Logger.INFO.out("Report any issues or errors directly to the developers @ " + Utils.SUPPORT_URL);
   }
@@ -110,96 +108,115 @@ public class Sophos extends JavaPlugin implements Listener {
 
   private void getHandlers() {
 	getServer().getPluginManager().registerEvents(new CMDSCToggle(this), this);
-	getServer().getPluginManager().registerEvents(new CMDMutechat(this), this);
+    if (this.getMessages().getBoolean("Messages.Chat.chat_enabled") == true) {
+        getServer().getPluginManager().registerEvents(new CMDChat(this), this);
+    }
 	getServer().getPluginManager().registerEvents(new ChatHandler(this), this);
 	getServer().getPluginManager().registerEvents(new JoinQuitHandler(this), this);
-	getServer().getPluginManager().registerEvents(new DevJoinHandler(this), this);
 	getServer().getPluginManager().registerEvents(new AntiSwear(this), this);
     if (this.getConfig().getBoolean("Checks.AntiSwear.enabled") == true) {
-	    Logger.SUCCESS.out("AntiSwear successfully loaded.");
+	    Logger.SUCCESS.out("AntiSwear successfully loaded");
 	}
     getServer().getPluginManager().registerEvents(new AntiAdvertisement(this), this);
     if (this.getConfig().getBoolean("Checks.AntiAdvertisement.enabled") == true) {
-        Logger.SUCCESS.out("AntiAdvertisement successfully loaded.");
+        Logger.SUCCESS.out("AntiAdvertisement successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AntiCapslock(this), this);
     if (this.getConfig().getBoolean("Checks.AntiCapslock.enabled") == true) {
-        Logger.SUCCESS.out("AntiCapslock successfully loaded.");
+        Logger.SUCCESS.out("AntiCapslock successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AntiCommandSpam(this), this);
     if (this.getConfig().getBoolean("Checks.CommandCooldown.enabled") == true) {
-        Logger.SUCCESS.out("AntiCommandSpam successfully loaded.");
+        Logger.SUCCESS.out("AntiCommandSpam successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AntiJoinSpam(this), this);
     if (this.getConfig().getBoolean("Checks.AntiJoinSpam.enabled") == true) {
-        Logger.SUCCESS.out("AntiJoinSpam successfully loaded.");
+        Logger.SUCCESS.out("AntiJoinSpam successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AntiSpam(this), this);
-    if (this.getConfig().getBoolean("Checks.AntiTabComplete.enabled") == true) {
-      Logger.SUCCESS.out("AntiTabComplete successfully loaded.");
-    }
     if (this.getConfig().getBoolean("Checks.ChatCooldown.enabled") == true) {
-      Logger.SUCCESS.out("AntiSpam successfully loaded.");
+      Logger.SUCCESS.out("AntiSpam successfully loaded");
+    }
+    if (this.getConfig().getBoolean("Checks.AntiTabComplete.enabled") == true) {
+      Logger.SUCCESS.out("AntiTabComplete successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AntiUnicode(this), this);
     if (this.getConfig().getBoolean("Checks.AntiUnicode.enabled") == true) {
-        Logger.SUCCESS.out("AntiUnicode successfully loaded.");
+        Logger.SUCCESS.out("AntiUnicode successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AutoCorrect(this), this);
     if (this.getConfig().getBoolean("Checks.AutoCorrect.enabled") == true) {
-        Logger.SUCCESS.out("AutoCorrect successfully loaded.");
+        Logger.SUCCESS.out("AutoCorrect successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new AutoDot(this), this);
     if (this.getConfig().getBoolean("Checks.AutoDot.enabled") == true) {
-      Logger.SUCCESS.out("AutoDot successfully loaded.");
+      Logger.SUCCESS.out("AutoDot successfully loaded");
     }
     getServer().getPluginManager().registerEvents(new BlockedCommands(this), this);
     if (this.getConfig().getBoolean("Checks.CommandBlocker.enabled") == true) {
-      Logger.SUCCESS.out("CommandBlocker successfully loaded.");
+      Logger.SUCCESS.out("CommandBlocker successfully loaded");
     }
-    if (this.getConfig().getBoolean("GUI.enabled") == true) {
-    	getServer().getPluginManager().registerEvents(new GUI(this), this);
+    if (this.getConfig().getBoolean("Sophos_GUI.enabled") == true) {
+    	getServer().getPluginManager().registerEvents(new SophosGUI(this), this);
     }
     getServer().getPluginManager().registerEvents(new AntiBotGUI(this), this);
   }
 
-  private void antiTabComplete() {
-    // Anti Tab Completer
-    final ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-    manager.addPacketListener(new PacketAdapter (this, new PacketType[] { PacketType.Play.Client.TAB_COMPLETE })
-    {
-      @SuppressWarnings("rawtypes")
-      public void onPacketReceiving(PacketEvent event) {
-        if (this.plugin.getConfig().getBoolean("Checks.AntiTabComplete.enabled")) {
-          if ((event.getPacketType() == PacketType.Play.Client.TAB_COMPLETE)
-                  && (!event.getPlayer().hasPermission(getConfig().getString("Checks.AntiTabComplete.bypassPermission")) || !event.getPlayer().hasPermission("sophos.bypass.*"))
-                  && (((String)event.getPacket().getStrings().read(0)).startsWith("/"))
-                  && (((String)event.getPacket().getStrings().read(0)).split(" ").length == 1)) {
+  public FileConfiguration getMessages() {
+    return this.messages;
+  }
 
-            event.setCancelled(true);
+  // Create Messages File
+  private void createMessages() {
+    mfile = new File(getDataFolder(), "messages.yml");
+    if (!mfile.exists()) {
+      mfile.getParentFile().mkdirs();
+      saveResource("messages.yml", false);
+    }
 
-            List<?> list = new ArrayList();
-            List<?> extra = new ArrayList();
+    messages= new YamlConfiguration ();
+    try {
+      messages.load(mfile);
+    } catch (IOException | InvalidConfigurationException e) {
+      e.printStackTrace();
+    }
+  }
 
-            String[] tabList = new String[list.size() + extra.size()];
+  // Reload Messages File
+  public void reloadMessages() {
+    try {
+      messages = YamlConfiguration.loadConfiguration(mfile);
+    } catch(Exception ex) {
+      Logger.ERROR.out(ChatColor.DARK_RED + "Failed to reload messages file! Report this to the developer @ " + Utils.SUPPORT_URL);
+    }
+  }
 
-            for (int index = 0; index < list.size(); index++) {
-              tabList[index] = ((String)list.get(index));
-            }
+  public FileConfiguration getConfig() {
+    return this.config;
+  }
 
-            for (int index = 0; index < extra.size(); index++) {
-              tabList[(index + list.size())] = ('/' + (String)extra.get(index));
-            }
-            PacketContainer tabComplete = manager.createPacket(PacketType.Play.Server.TAB_COMPLETE);
-            tabComplete.getStringArrays().write(0, tabList);
+  // Create Config File
+  private void createConfig() {
+    cfile = new File(getDataFolder(), "config.yml");
+    if (!cfile.exists()) {
+      cfile.getParentFile().mkdirs();
+      saveResource("config.yml", false);
+    }
 
-            try {
-              manager.sendServerPacket(event.getPlayer(), tabComplete);
-            } catch (InvocationTargetException e) {
-              e.printStackTrace();
-            }
-          }
-        }
-      }});
+    config= new YamlConfiguration ();
+    try {
+      config.load(cfile);
+    } catch (IOException | InvalidConfigurationException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Reload Config File
+  public void reloadConfig() {
+    try {
+      config = YamlConfiguration.loadConfiguration(cfile);
+    } catch(Exception ex) {
+      Logger.ERROR.out(ChatColor.DARK_RED + "Failed to reload config file! Report this to the developer @ " + Utils.SUPPORT_URL);
+    }
   }
 }

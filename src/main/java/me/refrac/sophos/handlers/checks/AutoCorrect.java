@@ -7,20 +7,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import me.refrac.sophos.handlers.Check;
+import org.bukkit.plugin.Plugin;
 
 public class AutoCorrect extends Check implements Listener {
 
-    private final Sophos plugin;
+    private Sophos sophos;
 
-    public AutoCorrect(Sophos plugin) {
-	  	super("AutoCorrect", "AutoCorrect", plugin);
-	    this.plugin = plugin;
+    public AutoCorrect(Plugin plugin) {
+	  	super("AutoCorrect", "AutoCorrect", (Sophos)plugin);
+        sophos = (Sophos)plugin;
     }
 
-    @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+    @EventHandler(ignoreCancelled = true)
     public void onAutoCorrectEvent(AsyncPlayerChatEvent chatEvent) {
-        if (this.plugin.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
-            if (chatEvent.getPlayer().hasPermission(this.plugin.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) && chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
+        if (this.sophos.getConfig().getBoolean("Checks." + this.getIdentifier() + ".enabled")) {
+            if (chatEvent.getPlayer().hasPermission(this.sophos.getConfig().getString("Checks." + this.getIdentifier() + ".bypassPermission")) || chatEvent.getPlayer().hasPermission("sophos.bypass.*")) {
                 return;
             }
             String message = chatEvent.getMessage();
@@ -33,7 +34,7 @@ public class AutoCorrect extends Check implements Listener {
                 String completedWord = array[i];
                 completedWord = this.autoCorrect(completedWord);
                 newMessage = String.valueOf(String.valueOf(String.valueOf(newMessage))) + completedWord + " ";
-                ++i;
+                i++;
             }
             String subString = newMessage.substring(0, 1);
             chatEvent.setMessage(String.valueOf(String.valueOf(String.valueOf(subString))) + newMessage.substring(1));
@@ -41,245 +42,245 @@ public class AutoCorrect extends Check implements Listener {
     }
 
     private String autoCorrect(String completedWord) {
-        if (completedWord.startsWith("cant")) {
+        if (completedWord.equalsIgnoreCase("cant")) {
             completedWord = "can't";
-        } else if (completedWord.startsWith("wouldnt")) {
+        } else if (completedWord.equalsIgnoreCase("wouldnt")) {
             completedWord = "wouldn't";
-        } else if (completedWord.startsWith("wont")) {
+        } else if (completedWord.equalsIgnoreCase("wont")) {
             completedWord = "won't";
-        } else if (completedWord.startsWith("couldnt")) {
+        } else if (completedWord.equalsIgnoreCase("couldnt")) {
             completedWord = "couldn't";
-        } else if (completedWord.startsWith("didnt")) {
+        } else if (completedWord.equalsIgnoreCase("didnt")) {
             completedWord = "didn't";
-        } else if (completedWord.startsWith("doesnt")) {
+        } else if (completedWord.equalsIgnoreCase("doesnt")) {
             completedWord = "doesn't";
-        } else if (completedWord.startsWith("shouldnt")) {
+        } else if (completedWord.equalsIgnoreCase("shouldnt")) {
             completedWord = "shouldn't";
-        } else if (completedWord.startsWith("wasnt")) {
+        } else if (completedWord.equalsIgnoreCase("wasnt")) {
             completedWord = "wasn't";
-        } else if (completedWord.startsWith("werent")) {
+        } else if (completedWord.equalsIgnoreCase("werent")) {
             completedWord = "weren't";
-        } else if (completedWord.startsWith("anyways")) {
+        } else if (completedWord.equalsIgnoreCase("anyways")) {
             completedWord = "anyway";
-        } else if (completedWord.startsWith("wierd")) {
+        } else if (completedWord.equalsIgnoreCase("wierd")) {
             completedWord = "weird";
-        } else if (completedWord.startsWith("alot")) {
+        } else if (completedWord.equalsIgnoreCase("alot")) {
             completedWord = "a lot";
-        } else if (completedWord.startsWith("abberration")) {
+        } else if (completedWord.equalsIgnoreCase("abberration")) {
             completedWord = "aberration";
-        } else if (completedWord.startsWith("acheive")) {
+        } else if (completedWord.equalsIgnoreCase("acheive")) {
             completedWord = "achieve";
-        } else if (completedWord.startsWith("adress")) {
+        } else if (completedWord.equalsIgnoreCase("adress")) {
             completedWord = "address";
-        } else if (completedWord.startsWith("alterior")) {
+        } else if (completedWord.equalsIgnoreCase("alterior")) {
             completedWord = "ulterior";
-        } else if (completedWord.startsWith("athiest")) {
+        } else if (completedWord.equalsIgnoreCase("athiest")) {
             completedWord = "atheist";
-        } else if (completedWord.startsWith("begining")) {
+        } else if (completedWord.equalsIgnoreCase("begining")) {
             completedWord = "beginning";
-        } else if (completedWord.startsWith("beleive")) {
+        } else if (completedWord.equalsIgnoreCase("beleive")) {
             completedWord = "believe";
-        } else if (completedWord.startsWith("caucasion")) {
+        } else if (completedWord.equalsIgnoreCase("caucasion")) {
             completedWord = "caucasian";
-        } else if (completedWord.startsWith("cemetary")) {
+        } else if (completedWord.equalsIgnoreCase("cemetary")) {
             completedWord = "cemetry";
-        } else if (completedWord.startsWith("committmeent")) {
+        } else if (completedWord.equalsIgnoreCase("committmeent")) {
             completedWord = "commitment";
-        } else if (completedWord.startsWith("concieve")) {
+        } else if (completedWord.equalsIgnoreCase("concieve")) {
             completedWord = "conceive";
-        } else if (completedWord.startsWith("copywrite")) {
+        } else if (completedWord.equalsIgnoreCase("copywrite")) {
             completedWord = "copyright";
-        } else if (completedWord.startsWith("dalmation")) {
+        } else if (completedWord.equalsIgnoreCase("dalmation")) {
             completedWord = "dalmatian";
-        } else if (completedWord.startsWith("color")) {
+        } else if (completedWord.equalsIgnoreCase("color")) {
             completedWord = "colour";
-        } else if (completedWord.startsWith("desireable")) {
+        } else if (completedWord.equalsIgnoreCase("desireable")) {
             completedWord = "desirable";
-        } else if (completedWord.startsWith("diarhea")) {
+        } else if (completedWord.equalsIgnoreCase("diarhea")) {
             completedWord = "diarrhoea";
-        } else if (completedWord.startsWith("dissapoint")) {
+        } else if (completedWord.equalsIgnoreCase("dissapoint")) {
             completedWord = "disappoint";
-        } else if (completedWord.startsWith("dispell")) {
+        } else if (completedWord.equalsIgnoreCase("dispell")) {
             completedWord = "dispel";
-        } else if (completedWord.startsWith("embarass")) {
+        } else if (completedWord.equalsIgnoreCase("embarass")) {
             completedWord = "embarrass";
-        } else if (completedWord.startsWith("facist")) {
+        } else if (completedWord.equalsIgnoreCase("facist")) {
             completedWord = "fascist";
-        } else if (completedWord.startsWith("febuary")) {
+        } else if (completedWord.equalsIgnoreCase("febuary")) {
             completedWord = "february";
-        } else if (completedWord.startsWith("fivety")) {
+        } else if (completedWord.equalsIgnoreCase("fivety")) {
             completedWord = "fifty";
-        } else if (completedWord.startsWith("fluoroscent")) {
+        } else if (completedWord.equalsIgnoreCase("fluoroscent")) {
             completedWord = "fluorescent";
-        } else if (completedWord.startsWith("flouride")) {
+        } else if (completedWord.equalsIgnoreCase("flouride")) {
             completedWord = "fluoride";
-        } else if (completedWord.startsWith("forteen")) {
+        } else if (completedWord.equalsIgnoreCase("forteen")) {
             completedWord = "fourteen";
-        } else if (completedWord.startsWith("fourty")) {
+        } else if (completedWord.equalsIgnoreCase("fourty")) {
             completedWord = "forty";
-        } else if (completedWord.startsWith("freind")) {
+        } else if (completedWord.equalsIgnoreCase("freind")) {
             completedWord = "friend";
-        } else if (completedWord.startsWith("geneology")) {
+        } else if (completedWord.equalsIgnoreCase("geneology")) {
             completedWord = "genealogy";
-        } else if (completedWord.startsWith("goverment")) {
+        } else if (completedWord.equalsIgnoreCase("goverment")) {
             completedWord = "government";
-        } else if (completedWord.startsWith("grammer")) {
+        } else if (completedWord.equalsIgnoreCase("grammer")) {
             completedWord = "grammar";
-        } else if (completedWord.startsWith("hampster")) {
+        } else if (completedWord.equalsIgnoreCase("hampster")) {
             completedWord = "hamster";
-        } else if (completedWord.startsWith("harrass")) {
+        } else if (completedWord.equalsIgnoreCase("harrass")) {
             completedWord = "harass";
-        } else if (completedWord.startsWith("hemorage")) {
+        } else if (completedWord.equalsIgnoreCase("hemorage")) {
             completedWord = "haemorrhage";
-        } else if (completedWord.startsWith("heros")) {
+        } else if (completedWord.equalsIgnoreCase("heros")) {
             completedWord = "heroes";
-        } else if (completedWord.startsWith("hight")) {
+        } else if (completedWord.equalsIgnoreCase("hight")) {
             completedWord = "height";
-        } else if (completedWord.startsWith("hygeine")) {
+        } else if (completedWord.equalsIgnoreCase("hygeine")) {
             completedWord = "hygiene";
-        } else if (completedWord.startsWith("hypocracy")) {
+        } else if (completedWord.equalsIgnoreCase("hypocracy")) {
             completedWord = "hypocricy";
-        } else if (completedWord.startsWith("independance")) {
+        } else if (completedWord.equalsIgnoreCase("independance")) {
             completedWord = "independence";
-        } else if (completedWord.startsWith("inate")) {
+        } else if (completedWord.equalsIgnoreCase("inate")) {
             completedWord = "innate";
-        } else if (completedWord.startsWith("innoculate")) {
+        } else if (completedWord.equalsIgnoreCase("innoculate")) {
             completedWord = "inoculate";
-        } else if (completedWord.startsWith("intresting")) {
+        } else if (completedWord.equalsIgnoreCase("intresting")) {
             completedWord = "interesting";
-        } else if (completedWord.startsWith("juge")) {
+        } else if (completedWord.equalsIgnoreCase("juge")) {
             completedWord = "judge";
-        } else if (completedWord.startsWith("knowlege")) {
+        } else if (completedWord.equalsIgnoreCase("knowlege")) {
             completedWord = "knowledge";
-        } else if (completedWord.startsWith("libary")) {
+        } else if (completedWord.equalsIgnoreCase("libary")) {
             completedWord = "library";
-        } else if (completedWord.startsWith("lightening")) {
+        } else if (completedWord.equalsIgnoreCase("lightening")) {
             completedWord = "lightning";
-        } else if (completedWord.startsWith("managable")) {
+        } else if (completedWord.equalsIgnoreCase("managable")) {
             completedWord = "manageable";
-        } else if (completedWord.startsWith("millenium")) {
+        } else if (completedWord.equalsIgnoreCase("millenium")) {
             completedWord = "millennium";
-        } else if (completedWord.startsWith("mischievious")) {
+        } else if (completedWord.equalsIgnoreCase("mischievious")) {
             completedWord = "mischievous";
-        } else if (completedWord.startsWith("mispell")) {
+        } else if (completedWord.equalsIgnoreCase("mispell")) {
             completedWord = "misspell";
-        } else if (completedWord.startsWith("monestary")) {
+        } else if (completedWord.equalsIgnoreCase("monestary")) {
             completedWord = "monastery";
-        } else if (completedWord.startsWith("monkies")) {
+        } else if (completedWord.equalsIgnoreCase("monkies")) {
             completedWord = "monkeys";
-        } else if (completedWord.startsWith("morgage")) {
+        } else if (completedWord.equalsIgnoreCase("morgage")) {
             completedWord = "mortgage";
-        } else if (completedWord.startsWith("mountian")) {
+        } else if (completedWord.equalsIgnoreCase("mountian")) {
             completedWord = "mountain";
-        } else if (completedWord.startsWith("neccessary")) {
+        } else if (completedWord.equalsIgnoreCase("neccessary")) {
             completedWord = "necessary";
-        } else if (completedWord.startsWith("neice")) {
+        } else if (completedWord.equalsIgnoreCase("neice")) {
             completedWord = "niece";
-        } else if (completedWord.startsWith("nickle")) {
+        } else if (completedWord.equalsIgnoreCase("nickle")) {
             completedWord = "nickel";
-        } else if (completedWord.startsWith("nineth")) {
+        } else if (completedWord.equalsIgnoreCase("nineth")) {
             completedWord = "ninth";
-        } else if (completedWord.startsWith("ninty")) {
+        } else if (completedWord.equalsIgnoreCase("ninty")) {
             completedWord = "ninety";
-        } else if (completedWord.startsWith("noone")) {
+        } else if (completedWord.equalsIgnoreCase("noone")) {
             completedWord = "no one";
-        } else if (completedWord.startsWith("noticable")) {
+        } else if (completedWord.equalsIgnoreCase("noticable")) {
             completedWord = "noticeable";
-        } else if (completedWord.startsWith("occured")) {
+        } else if (completedWord.equalsIgnoreCase("occured")) {
             completedWord = "occurred";
-        } else if (completedWord.startsWith("ocurence")) {
+        } else if (completedWord.equalsIgnoreCase("ocurence")) {
             completedWord = "occurrence";
-        } else if (completedWord.startsWith("oppurtunity")) {
+        } else if (completedWord.equalsIgnoreCase("oppurtunity")) {
             completedWord = "opportunity";
-        } else if (completedWord.startsWith("opthamologist")) {
+        } else if (completedWord.equalsIgnoreCase("opthamologist")) {
             completedWord = "ophthalmologist";
-        } else if (completedWord.startsWith("paralell")) {
+        } else if (completedWord.equalsIgnoreCase("paralell")) {
             completedWord = "parallel";
-        } else if (completedWord.startsWith("parallell")) {
+        } else if (completedWord.equalsIgnoreCase("parallell")) {
             completedWord = "parallel";
-        } else if (completedWord.startsWith("pasttimee")) {
+        } else if (completedWord.equalsIgnoreCase("pasttimee")) {
             completedWord = "pastime";
-        } else if (completedWord.startsWith("pavillion")) {
+        } else if (completedWord.equalsIgnoreCase("pavillion")) {
             completedWord = "pavilion";
-        } else if (completedWord.startsWith("peice")) {
+        } else if (completedWord.equalsIgnoreCase("peice")) {
             completedWord = "piece";
-        } else if (completedWord.startsWith("percieve")) {
+        } else if (completedWord.equalsIgnoreCase("percieve")) {
             completedWord = "perceive";
-        } else if (completedWord.startsWith("perserverance")) {
+        } else if (completedWord.equalsIgnoreCase("perserverance")) {
             completedWord = "perseverance";
-        } else if (completedWord.startsWith("persue")) {
+        } else if (completedWord.equalsIgnoreCase("persue")) {
             completedWord = "pursue";
-        } else if (completedWord.startsWith("posesesion")) {
+        } else if (completedWord.equalsIgnoreCase("posesesion")) {
             completedWord = "possession";
-        } else if (completedWord.startsWith("potatoe")) {
+        } else if (completedWord.equalsIgnoreCase("potatoe")) {
             completedWord = "potato";
-        } else if (completedWord.startsWith("preceeding")) {
+        } else if (completedWord.equalsIgnoreCase("preceeding")) {
             completedWord = "preceding";
-        } else if (completedWord.startsWith("pronounciation")) {
+        } else if (completedWord.equalsIgnoreCase("pronounciation")) {
             completedWord = "pronunciation";
-        } else if (completedWord.startsWith("privelige")) {
+        } else if (completedWord.equalsIgnoreCase("privelige")) {
             completedWord = "privilege";
-        } else if (completedWord.startsWith("publically")) {
+        } else if (completedWord.equalsIgnoreCase("publically")) {
             completedWord = "publicly";
-        } else if (completedWord.startsWith("quew")) {
+        } else if (completedWord.equalsIgnoreCase("quew")) {
             completedWord = "queue";
-        } else if (completedWord.startsWith("rasberry")) {
+        } else if (completedWord.equalsIgnoreCase("rasberry")) {
             completedWord = "raspberry";
-        } else if (completedWord.startsWith("recieve")) {
+        } else if (completedWord.equalsIgnoreCase("recieve")) {
             completedWord = "receive";
-        } else if (completedWord.startsWith("reccomend")) {
+        } else if (completedWord.equalsIgnoreCase("reccomend")) {
             completedWord = "recommend";
-        } else if (completedWord.startsWith("rediculous")) {
+        } else if (completedWord.equalsIgnoreCase("rediculous")) {
             completedWord = "ridiculous";
-        } else if (completedWord.startsWith("reguardless")) {
+        } else if (completedWord.equalsIgnoreCase("reguardless")) {
             completedWord = "regardless";
-        } else if (completedWord.startsWith("rythm")) {
+        } else if (completedWord.equalsIgnoreCase("rythm")) {
             completedWord = "rhythm";
-        } else if (completedWord.startsWith("shedule")) {
+        } else if (completedWord.equalsIgnoreCase("shedule")) {
             completedWord = "schedule";
-        } else if (completedWord.startsWith("seige")) {
+        } else if (completedWord.equalsIgnoreCase("seige")) {
             completedWord = "siege";
-        } else if (completedWord.startsWith("sentance")) {
+        } else if (completedWord.equalsIgnoreCase("sentance")) {
             completedWord = "sentence";
-        } else if (completedWord.startsWith("seperate")) {
+        } else if (completedWord.equalsIgnoreCase("seperate")) {
             completedWord = "separate";
-        } else if (completedWord.startsWith("sieze")) {
+        } else if (completedWord.equalsIgnoreCase("sieze")) {
             completedWord = "seize";
-        } else if (completedWord.startsWith("sincerly")) {
+        } else if (completedWord.equalsIgnoreCase("sincerly")) {
             completedWord = "sincerely";
-        } else if (completedWord.startsWith("speach")) {
+        } else if (completedWord.equalsIgnoreCase("speach")) {
             completedWord = "speech";
-        } else if (completedWord.startsWith("stragedy")) {
+        } else if (completedWord.equalsIgnoreCase("stragedy")) {
             completedWord = "strategy";
-        } else if (completedWord.startsWith("supercede")) {
+        } else if (completedWord.equalsIgnoreCase("supercede")) {
             completedWord = "supersede";
-        } else if (completedWord.startsWith("suprise")) {
+        } else if (completedWord.equalsIgnoreCase("suprise")) {
             completedWord = "surprise";
-        } else if (completedWord.startsWith("thier")) {
+        } else if (completedWord.equalsIgnoreCase("thier")) {
             completedWord = "their";
-        } else if (completedWord.startsWith("tomorow")) {
+        } else if (completedWord.equalsIgnoreCase("tomorow")) {
             completedWord = "tomorrow";
-        } else if (completedWord.startsWith("tounge")) {
+        } else if (completedWord.equalsIgnoreCase("tounge")) {
             completedWord = "tongue";
-        } else if (completedWord.startsWith("uneform")) {
+        } else if (completedWord.equalsIgnoreCase("uneform")) {
             completedWord = "uniform";
-        } else if (completedWord.startsWith("vaccuum")) {
+        } else if (completedWord.equalsIgnoreCase("vaccuum")) {
             completedWord = "vacuum";
-        } else if (completedWord.startsWith("vegeterian")) {
+        } else if (completedWord.equalsIgnoreCase("vegeterian")) {
             completedWord = "vegetarian";
-        } else if (completedWord.startsWith("writen")) {
+        } else if (completedWord.equalsIgnoreCase("writen")) {
             completedWord = "written";
-        } else if (completedWord.startsWith("writting")) {
+        } else if (completedWord.equalsIgnoreCase("writting")) {
             completedWord = "writing";
-        } else if (completedWord.startsWith("calender")) {
+        } else if (completedWord.equalsIgnoreCase("calender")) {
             completedWord = "calendar";
-        } else if (completedWord.startsWith("comming")) {
+        } else if (completedWord.equalsIgnoreCase("comming")) {
             completedWord = "coming";
-        } else if (completedWord.startsWith("softwares")) {
+        } else if (completedWord.equalsIgnoreCase("softwares")) {
             completedWord = "software";
-        } else if (completedWord.startsWith("thats")) {
+        } else if (completedWord.equalsIgnoreCase("thats")) {
             completedWord = "that's";
-        } else if (completedWord.startsWith("u")) {
+        } else if (completedWord.equalsIgnoreCase("u")) {
             completedWord = "you";
         }
         return completedWord;

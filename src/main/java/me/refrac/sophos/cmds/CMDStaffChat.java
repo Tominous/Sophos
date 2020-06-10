@@ -16,15 +16,15 @@ import org.bukkit.entity.Player;
 
 import com.google.common.base.Joiner;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.refrac.sophos.Sophos;
+import org.bukkit.plugin.Plugin;
 
 public class CMDStaffChat implements CommandExecutor {
 	
-	private Sophos plugin;
-	
-	public CMDStaffChat(Sophos plugin) {
-	    this.plugin = plugin;
+	private Sophos sophos;
+
+	public CMDStaffChat(Plugin plugin) {
+		sophos = (Sophos)plugin;
 	}
 	
 	public String chat(String s) {
@@ -35,31 +35,31 @@ public class CMDStaffChat implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
 		if (!(sender instanceof Player)) return false;
 	    Player player = (Player)sender;
-	    if (!player.hasPermission("sophos.staffchat.use") && !player.hasPermission("sophos.staff")) {
-			player.sendMessage(chat(plugin.getConfig().getString("Messages.no-permission")));
+	    if (!player.hasPermission("sophos.staff")) {
+			player.sendMessage(chat(sophos.getMessages().getString("Messages.Chat.no-permission")));
 	    	return false;
 	    }
+	    if (args.length < 1) {
+			player.sendMessage(chat("&cUsage: &7/staffchat <message>"));
+		}
 	    if (args.length > 0) {
 	    String finalString, str = Joiner.on(" ").join(args);
-		finalString = plugin.getConfig().getString("Messages.format");
+		finalString = sophos.getMessages().getString("Messages.Chat.staffchat_format");
 
 		finalString = Utils.setupPlaceholderAPI(player, finalString);
 		finalString = Utils.colorFormat(player, finalString);
 		finalString = Placeholders.setPlaceholders(player, finalString);
-		finalString = Utils.chat(finalString);
+		finalString = Utils.color(finalString);
 		finalString = finalString.replace("{message}", str);
 		finalString = finalString.replaceAll("%", "%%");
 		finalString = Utils.replaceAllVariables(player, finalString);
 
 	    for (Player staff : Bukkit.getServer().getOnlinePlayers()) {
-            if (staff.hasPermission("sophos.staffchat.use") && staff.hasPermission("sophos.staff")) {
+            if (staff.hasPermission("sophos.staff")) {
               staff.sendMessage(finalString);
             }
           }
-	    } else {
-			player.sendMessage(chat("&cUsage: &7/staffchat <message>"));
-		}
-	    
+	    }
 	    return true;
 	}
 }

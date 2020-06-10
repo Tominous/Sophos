@@ -14,7 +14,7 @@ public class Placeholders {
     public static String setPlaceholders(Player player, String placeholders) {
         placeholders = Utils.colorFormat(player, placeholders.replace("{player}", player.getName()));
         placeholders = Utils.colorFormat(player, placeholders.replace("{displayname}", player.getDisplayName()));
-        placeholders = Utils.chat(placeholders.replace("{arrowright}", "\u00BB"));
+        placeholders = Utils.color(placeholders.replace("{arrowright}", "\u00BB"));
         return placeholders;
     }
 }

@@ -6,9 +6,9 @@ import org.bukkit.event.Listener;
 
 public class Check implements Listener {
 	
-    private String Identifier;
-    private String Name;
-    private Sophos Sophos;
+    private final String Identifier;
+    private final String Name;
+    private final Sophos Sophos;
     private boolean Enabled = true;
 
     public Check(String Identifier, String Name, Sophos Sophos) {
