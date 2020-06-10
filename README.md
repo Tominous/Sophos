@@ -20,4 +20,7 @@
 ```
 
 ### License
-License information can be found in the [LICENSE.md](LICENSE.md) file.  
+License information can be found in the [LICENSE.md](LICENSE.md) file.
+
+### SophosAPI
+SophosAPI information can be found in the [SophosAPI.md](SophosAPI.md) file.  
